@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pentest Security Flashcards</title>
+    <title>Pentest Flashcards</title>
     <style>
         * {
             box-sizing: border-box;
@@ -149,7 +149,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Pentest Security Flashcards</h1>
+        <h1>Pentest Flashcards</h1>
         
         <div class="controls">
             <select id="category-select">
@@ -162,6 +162,8 @@
                 <option value="cryptography">Cryptography</option>
                 <option value="authentication">Authentication & Authorization</option>
                 <option value="mobile">Mobile Security</option>
+                <option value="ssl-tls">SSL/TLS Security</option>
+                <option value="pentesting">Penetration Testing</option>
             </select>
         </div>
         
@@ -194,7 +196,7 @@
             owasp: [
                 {
                     front: "A01:2021 - What is Broken Access Control?",
-                    back: "Restrictions on authenticated users are not properly enforced. Attackers can exploit these flaws to access unauthorized functionality and/or data, such as accessing other users' accounts, viewing sensitive files, modifying other users' data, or changing access rights."
+                    back: "Broken Access Control occurs when restrictions on authenticated users are not properly enforced. Attackers can exploit these flaws to access unauthorized functionality and/or data, such as accessing other users' accounts, viewing sensitive files, modifying other users' data, or changing access rights."
                 },
                 {
                     front: "A01:2021 - Give examples of Broken Access Control vulnerabilities.",
@@ -202,11 +204,11 @@
                 },
                 {
                     front: "A01:2021 - How to prevent Broken Access Control vulnerabilities?",
-                    back: "Implement proper access controls: deny by default, enforce record ownership, disable directory listing, log access control failures, rate limit API access, invalidate JWTs on logout, implement stateful session management, and use automated testing of access controls."
+                    back: "Mitigation: Implement proper access controls: deny by default, enforce record ownership, disable directory listing, log access control failures, rate limit API access, invalidate JWTs on logout, implement stateful session management, use automated testing of access controls, and implement authorization checks at the controller or business logic level rather than the presentation layer."
                 },
                 {
                     front: "A02:2021 - What are Cryptographic Failures?",
-                    back: "Failures related to cryptography (or lack thereof) that often lead to exposure of sensitive data. This includes failures to encrypt data in transit or at rest, using weak or outdated cryptographic algorithms, and improper key management practices."
+                    back: "Cryptographic Failures are weaknesses related to cryptography (or lack thereof) that often lead to exposure of sensitive data. This includes failures to encrypt data in transit or at rest, using weak or outdated cryptographic algorithms, and improper key management practices."
                 },
                 {
                     front: "A02:2021 - Give examples of Cryptographic Failures.",
@@ -214,7 +216,7 @@
                 },
                 {
                     front: "A02:2021 - How to prevent Cryptographic Failures?",
-                    back: "Classify and protect sensitive data, don't store unnecessary sensitive data, encrypt all sensitive data at rest, use strong encryption algorithms and proper key management, disable caching for sensitive data, enforce HTTPS, use proper password storage with strong adaptive hashing."
+                    back: "Mitigation: Classify and protect sensitive data, don't store unnecessary sensitive data, encrypt all sensitive data at rest using strong algorithms, use proper key management with secure key storage, disable caching for sensitive data, enforce HTTPS with proper certificate validation, use proper password storage with strong adaptive hashing (bcrypt/Argon2), and verify independently the effectiveness of configuration and settings."
                 },
                 {
                     front: "A03:2021 - What is Injection?",
@@ -226,11 +228,11 @@
                 },
                 {
                     front: "A03:2021 - How to prevent Injection vulnerabilities?",
-                    back: "Use a safe API that avoids using interpreters, parameterized queries, or ORM tools. Perform positive server-side input validation. Use LIMIT for SQL queries. Escape special characters. Implement SAST tools and automated testing for injection flaws."
+                    back: "Mitigation: Use a safe API that avoids interpreters, implement parameterized queries or prepared statements, use ORM tools with parameter binding, perform positive server-side input validation with allowlisting, escape special characters using the syntax specific to the target interpreter, and use SAST tools and automated testing for injection flaws. For OS commands, use process launching APIs instead of command concatenation."
                 },
                 {
                     front: "A04:2021 - What is Insecure Design?",
-                    back: "Insecure design refers to risks related to design and architectural flaws, emphasizing the need for secure design patterns, threat modeling, and reference architectures. It's distinct from implementation flaws and represents a broad category of weaknesses that were previously not well-represented in the Top 10."
+                    back: "Insecure Design refers to risks related to design and architectural flaws, emphasizing the need for secure design patterns, threat modeling, and reference architectures. It's distinct from implementation flaws and represents a broad category of weaknesses that were previously not well-represented in the Top 10."
                 },
                 {
                     front: "A04:2021 - Give examples of Insecure Design flaws.",
@@ -238,11 +240,11 @@
                 },
                 {
                     front: "A04:2021 - How to prevent Insecure Design?",
-                    back: "Establish secure development lifecycle with security professionals, use threat modeling for critical flows, integrate security requirements and user stories, reference secure design patterns and architectures, use security integration and unit tests, conduct secure code reviews, and limit resource consumption by user."
+                    back: "Mitigation: Establish secure development lifecycle with security professionals, use threat modeling for critical flows, integrate security requirements and user stories, reference secure design patterns and architectures, use security integration and unit tests, conduct secure code reviews, limit resource consumption by user, and establish and use a library of secure design patterns. Implement defense in depth at all levels of the application."
                 },
                 {
                     front: "A05:2021 - What is Security Misconfiguration?",
-                    back: "Security misconfiguration is the most commonly seen issue, often resulting from insecure default configurations, incomplete or ad hoc configurations, open cloud storage, misconfigured HTTP headers, and verbose error messages containing sensitive information."
+                    back: "Security Misconfiguration is the most commonly seen issue, often resulting from insecure default configurations, incomplete or ad hoc configurations, open cloud storage, misconfigured HTTP headers, and verbose error messages containing sensitive information."
                 },
                 {
                     front: "A05:2021 - Give examples of Security Misconfiguration.",
@@ -250,11 +252,11 @@
                 },
                 {
                     front: "A05:2021 - How to prevent Security Misconfiguration?",
-                    back: "Implement secure hardening process, platform-specific security configurations, minimal platforms without unnecessary features, automated verification process for configurations, segmented application architecture, sending security directives to clients (security headers), and automated verification of configurations."
+                    back: "Mitigation: Implement secure hardening process, platform-specific security configurations, minimal platforms without unnecessary features, automated verification process for configurations, segment application architecture, send security directives to clients (security headers), and automate verification of configurations in all environments. Use a repeatable hardening process that makes it fast and easy to deploy properly locked down environments."
                 },
                 {
                     front: "A06:2021 - What are Vulnerable and Outdated Components?",
-                    back: "Using components with known vulnerabilities can undermine application defenses and enable attacks. This includes using components that are outdated, unsupported, or vulnerable versions of libraries, frameworks, and other software modules that run with the same privileges as the application."
+                    back: "Vulnerable and Outdated Components refers to using components (like libraries, frameworks, and other software modules) with known vulnerabilities. This includes using components that are outdated, unsupported, or vulnerable versions that run with the same privileges as the application."
                 },
                 {
                     front: "A06:2021 - Why are Vulnerable and Outdated Components dangerous?",
@@ -262,11 +264,11 @@
                 },
                 {
                     front: "A06:2021 - How to prevent vulnerabilities from Outdated Components?",
-                    back: "Remove unused dependencies, continuously inventory components and their versions, monitor for vulnerabilities using tools like OWASP Dependency-Check, only use official sources, monitor unmaintained libraries, use Software Composition Analysis (SCA) tools in CI/CD, and implement virtual patches."
+                    back: "Mitigation: Remove unused dependencies, continuously inventory components and their versions, monitor for vulnerabilities using tools like OWASP Dependency-Check, only use official sources, monitor unmaintained libraries, use Software Composition Analysis (SCA) tools in CI/CD, implement virtual patches, and establish a patch management strategy. Subscribe to security bulletins related to your components."
                 },
                 {
                     front: "A07:2021 - What are Identification and Authentication Failures?",
-                    back: "Confirmation of the user's identity, authentication, and session management is critical to protect against authentication-related attacks. Weaknesses may include permitting automated attacks, brute force attacks, weak credentials, improper session management, and weak or ineffective credential recovery."
+                    back: "Identification and Authentication Failures occur when functions related to user identity, authentication, or session management are implemented incorrectly. Weaknesses may include permitting automated attacks, brute force attacks, weak credentials, improper session management, and weak or ineffective credential recovery."
                 },
                 {
                     front: "A07:2021 - Give examples of Identification and Authentication Failures.",
@@ -274,11 +276,11 @@
                 },
                 {
                     front: "A07:2021 - How to prevent Identification and Authentication Failures?",
-                    back: "Implement MFA, avoid default credentials, implement weak-password checks, align password policy with NIST 800-63b, harden registration and credential recovery processes, use server-side session management with secure cookies, and implement proper session timeouts."
+                    back: "Mitigation: Implement MFA to prevent automated attacks, credential stuffing, brute force and account recovery attacks; avoid default credentials; implement weak-password checks; align password policy with NIST 800-63b; harden registration and credential recovery processes; use server-side session management with secure cookies; and implement proper session timeouts. Use a server-side, secure built-in session manager that generates new random session IDs with high entropy after login."
                 },
                 {
                     front: "A08:2021 - What is Software and Data Integrity Failures?",
-                    back: "Software and data integrity failures relate to code and infrastructure that does not protect against integrity violations. Examples include relying on plugins from untrusted sources, auto-update functionality without sufficient integrity verification, and CI/CD pipelines without proper security controls."
+                    back: "Software and Data Integrity Failures relate to code and infrastructure that does not protect against integrity violations. Examples include relying on plugins from untrusted sources, auto-update functionality without sufficient integrity verification, and CI/CD pipelines without proper security controls."
                 },
                 {
                     front: "A08:2021 - Give examples of Software and Data Integrity Failures.",
@@ -286,11 +288,11 @@
                 },
                 {
                     front: "A08:2021 - How to prevent Software and Data Integrity Failures?",
-                    back: "Use digital signatures to verify software/data integrity, ensure dependencies come from trusted repositories, use software supply chain security tools, implement review process for code changes, ensure CI/CD pipeline has proper segregation and configuration control, and sign serialized data."
+                    back: "Mitigation: Use digital signatures to verify software/data integrity, ensure dependencies come from trusted repositories, use software supply chain security tools, implement review process for code changes, ensure CI/CD pipeline has proper segregation and configuration control, sign serialized data, and verify the integrity of software updates. Ensure your application verifies the integrity of critical data from untrusted sources."
                 },
                 {
                     front: "A09:2021 - What is Security Logging and Monitoring Failures?",
-                    back: "This category helps detect, escalate, and respond to active breaches. Without logging and monitoring, breaches cannot be detected. Insufficient logging, detection, monitoring, and active response occurs any time security-relevant events are not logged or alerts are not effectively generated."
+                    back: "Security Logging and Monitoring Failures involve inadequate logging, detection, monitoring, and active response. Without proper logging and monitoring, breaches cannot be detected. This occurs when security-relevant events are not logged, logs are not monitored effectively, or alerts are not properly generated or responded to."
                 },
                 {
                     front: "A09:2021 - Give examples of Security Logging and Monitoring Failures.",
@@ -298,7 +300,7 @@
                 },
                 {
                     front: "A09:2021 - How to prevent Security Logging and Monitoring Failures?",
-                    back: "Implement logging for authentication, access control failures, and server-side input validation failures. Ensure logs are in a format that log management solutions can consume, ensure high-value transactions have audit trails, establish effective monitoring and alerting, and develop a response and recovery plan."
+                    back: "Mitigation: Implement logging for authentication, access control failures, and server-side input validation failures with sufficient context. Ensure logs are in a format that log management solutions can consume, ensure high-value transactions have audit trails, establish effective monitoring and alerting, and develop a response and recovery plan. Implement a security incident event management (SIEM) system or log analysis tools to correlate and analyze logs."
                 },
                 {
                     front: "A10:2021 - What is Server-Side Request Forgery (SSRF)?",
@@ -310,7 +312,7 @@
                 },
                 {
                     front: "A10:2021 - How to prevent SSRF vulnerabilities?",
-                    back: "Implement network layer controls (segregate remote resource access functionality, enforce 'deny by default' firewall policies), apply application layer controls (sanitize and validate all client-supplied input data, enforce URL schema/port/destination with positive allow list), and disable HTTP redirections."
+                    back: "Mitigation: Implement network layer controls (segregate remote resource access functionality, enforce 'deny by default' firewall policies); apply application layer controls (sanitize and validate all client-supplied input data, enforce URL schema/port/destination with positive allow list); disable HTTP redirections; and do not send raw responses to clients. For high-risk applications, consider deploying a DNS filtering service or firewall rules to block all internal DNS lookups and traffic not destined for trusted hosts."
                 }
             ],
             fundamentals: [
@@ -371,6 +373,10 @@
                     back: "Vulnerability scanning is the process of automatically identifying security vulnerabilities in systems, networks, or applications. It uses specialized software to detect and report on known vulnerabilities, misconfigurations, or potential security weaknesses."
                 },
                 {
+                    front: "What is the difference between vulnerability scanning and penetration testing?",
+                    back: "Vulnerability scanning is automated, identifies known vulnerabilities without exploiting them, and typically covers a broader scope. Penetration testing is more targeted, involves active exploitation of vulnerabilities, includes manual techniques, and provides deeper insight into real-world impact. Pen testing often starts where vulnerability scanning ends."
+                },
+                {
                     front: "What is penetration testing?",
                     back: "Penetration testing (or pen testing) is a simulated cyber attack against a system to check for exploitable vulnerabilities. It goes beyond automated vulnerability scanning by actively attempting to exploit vulnerabilities to determine what an attacker might be able to access or damage."
                 },
@@ -393,6 +399,38 @@
                 {
                     front: "What is the difference between symmetric and asymmetric encryption?",
                     back: "Symmetric encryption uses the same key for both encryption and decryption (faster but key distribution is challenging). Asymmetric encryption uses different keys for encryption (public key) and decryption (private key), solving the key distribution problem but generally slower."
+                },
+                {
+                    front: "What is the principle of defense in depth?",
+                    back: "Defense in depth involves implementing multiple layers of security controls throughout a system, so that if one security measure fails, others are in place to prevent a full breach. It includes physical, technical, and administrative controls, and applies multiple different types of controls at different levels of the system."
+                },
+                {
+                    front: "What is security through obscurity and why is it problematic?",
+                    back: "Security through obscurity relies on secrecy of design, implementation, or configuration for security rather than robust security controls. It's problematic because once the secret is discovered, the system is vulnerable. Good security should remain effective even if the attacker knows everything about the system except the keys."
+                },
+                {
+                    front: "What is input sanitization and how does it differ from validation?",
+                    back: "Input sanitization modifies user input to ensure it's safe for processing (removing/replacing dangerous characters). Input validation checks if data meets criteria without changing it (accepting or rejecting). Sanitization transforms potentially malicious data into safe format, while validation determines if data is acceptable in its current form."
+                },
+                {
+                    front: "What is the difference between SAST and DAST?",
+                    back: "Static Application Security Testing (SAST) analyzes source code for security vulnerabilities without executing the application. Dynamic Application Security Testing (DAST) tests running applications by attacking from the outside. SAST finds implementation bugs early; DAST finds runtime and environment issues like misconfigurations."
+                },
+                {
+                    front: "What is threat modeling?",
+                    back: "Threat modeling is a structured process of identifying potential threats to a system and determining their potential impact. It involves identifying assets, threat actors, attack vectors, and vulnerabilities, then prioritizing risks and developing mitigation strategies. Common methodologies include STRIDE, PASTA, and DREAD."
+                },
+                {
+                    front: "What are security requirements?",
+                    back: "Security requirements define the security controls and measures needed to protect a system or application. They include functional requirements (authentication, authorization, encryption) and non-functional requirements (compliance, audit controls, performance under attack). They should be specific, measurable, and testable."
+                },
+                {
+                    front: "What is secure code review?",
+                    back: "Secure code review is the systematic examination of source code to identify security vulnerabilities like SQL injection, XSS, buffer overflows, or logic flaws. It can be manual (performed by security experts) or automated (using SAST tools), and ideally combines both approaches for comprehensive coverage."
+                },
+                {
+                    front: "What is the security impact of third-party components?",
+                    back: "Third-party components may introduce security risks through: known vulnerabilities, insufficient vetting, lack of patches, unexpected behavior, supply chain attacks, data leakage, excessive permissions, or poor integration practices. Mitigation requires proper inventory, vetting, monitoring, and update policies."
                 }
             ],
             tools: [
@@ -403,6 +441,10 @@
                 {
                     front: "What are the main components of Burp Suite?",
                     back: "Burp Suite includes: Proxy (intercepts and modifies requests/responses), Scanner (automated vulnerability detection), Intruder (customized attack automation), Repeater (manual request modification and resending), Decoder (encode/decode data), Comparer (compare data), and Sequencer (analyze randomness)."
+                },
+                {
+                    front: "How is Burp Intruder used in penetration testing?",
+                    back: "Burp Intruder automates customized attacks by taking a base request and replacing specific parts with payloads. Its attack types include: Sniper (tests one payload position), Battering ram (puts same payload in multiple positions), Pitchfork (iterates through multiple payload sets simultaneously), and Cluster bomb (tries all combinations of payloads). It's used for brute forcing, fuzzing, and enumerating resources."
                 },
                 {
                     front: "What is OWASP ZAP (Zed Attack Proxy)?",
@@ -421,12 +463,20 @@
                     back: "Common Nmap scan types include: TCP SYN scan (-sS, half-open scanning), TCP connect scan (-sT, complete connections), UDP scan (-sU), FIN scan (-sF, sends a FIN packet), Ping scan (-sP, just determine if hosts are online), and Version detection (-sV, determines service versions)."
                 },
                 {
+                    front: "What is Nmap scripting engine (NSE) and how is it used?",
+                    back: "NSE allows users to write and share scripts to automate a wide variety of networking tasks. Scripts are organized by categories like auth, vuln, exploit, discovery. Example uses include detecting vulnerabilities, performing brute force attacks, gathering additional service information, and even active exploitation. Activated using --script option."
+                },
+                {
                     front: "What is Metasploit Framework?",
                     back: "Metasploit Framework is an open-source penetration testing platform that enables you to find, exploit, and validate vulnerabilities. It provides a complete environment for penetration testing and exploit development, including a database of known exploits."
                 },
                 {
                     front: "What are the key components of Metasploit?",
                     back: "Key components include: Exploits (code to take advantage of vulnerabilities), Payloads (code that runs after exploitation), Auxiliaries (scanning, fuzzing, sniffing tools), Post-exploitation modules (for maintaining access), and the msfconsole (command interface)."
+                },
+                {
+                    front: "What types of payloads does Metasploit offer and how do they differ?",
+                    back: "Metasploit offers: Singles (self-contained, run and exit), Stagers (small payloads that establish connection and download larger stage), Stages (downloaded by stagers, provide advanced features), Meterpreter (advanced payload with in-memory DLL injection), and Non-Meterpreter (simpler command shells). They differ in functionality, size, stealth, and stability."
                 },
                 {
                     front: "What is Nikto?",
@@ -437,8 +487,16 @@
                     back: "Wireshark is a network protocol analyzer that lets you capture and interactively browse the traffic running on a computer network. It provides detailed inspection of hundreds of protocols, live capture and offline analysis, and deep inspection of many protocols."
                 },
                 {
+                    front: "How do you use display filters in Wireshark to focus on specific traffic?",
+                    back: "Wireshark display filters use syntax like 'protocol.field == value'. Common examples: 'http' (show only HTTP), 'ip.addr == 192.168.1.1' (traffic to/from specific IP), 'tcp.port == 443' (HTTPS traffic), 'http.request.method == \"GET\"' (HTTP GET requests), and '!(arp or dns)' (exclude ARP and DNS). Filters can be combined with 'and', 'or', and 'not'."
+                },
+                {
                     front: "What is SQLmap?",
                     back: "SQLmap is an open-source penetration testing tool that automates the process of detecting and exploiting SQL injection flaws and taking over database servers. It features a powerful detection engine, many niche features for the ultimate penetration tester, and a broad range of switches for database fingerprinting, data fetching, and accessing the underlying file system."
+                },
+                {
+                    front: "What are key SQLmap options and techniques?",
+                    back: "Key options include: --url (target URL), --data (POST data), --cookie (session cookies), --dbs (enumerate databases), --tables (list tables), --dump (extract data), --os-shell (get OS command execution), --technique (specify injection techniques like BEUSTQ), --risk/--level (control test thoroughness), and --proxy (route through proxy)."
                 },
                 {
                     front: "What is John the Ripper?",
@@ -461,6 +519,10 @@
                     back: "Hydra is a parallelized login cracker which supports numerous protocols to attack. It is very fast and flexible, and new modules are easy to add. It can perform rapid dictionary attacks against more than 50 protocols, including telnet, FTP, HTTP, HTTPS, SMB, databases, LDAP, and more."
                 },
                 {
+                    front: "What are some common Hydra command options?",
+                    back: "Common Hydra options include: -l (single username) or -L (username list file), -p (single password) or -P (password list file), -t (number of parallel connections), -V (verbose mode), -f (stop after first valid credential pair), and protocol-specific options like http-post-form for web form attacks."
+                },
+                {
                     front: "What is Dirb/Dirbuster?",
                     back: "Dirb/Dirbuster are web content scanning tools designed to find hidden directories and files by performing dictionary-based attacks against web servers. They use wordlists to find directories and files that are not linked directly from the website but are still accessible."
                 },
@@ -475,6 +537,18 @@
                 {
                     front: "What is Snort?",
                     back: "Snort is an open-source network intrusion prevention system (NIPS) and network intrusion detection system (NIDS). It can perform real-time traffic analysis and packet logging on IP networks, as well as protocol analysis, content searching/matching, and detection of various attacks and probes."
+                },
+                {
+                    front: "What is the difference between gobuster, dirb, and dirbuster?",
+                    back: "All three tools bruteforce directories and files, but with differences: Gobuster is written in Go, has faster performance due to threading, and has additional features for DNS and vhost enumeration. Dirb is command-line only, handles cookies easily, and has good recursive scanning. Dirbuster has a GUI interface and more detailed reporting but is no longer actively maintained."
+                },
+                {
+                    front: "What is Hashcat?",
+                    back: "Hashcat is the world's fastest password recovery tool, supporting five unique attack modes for over 300 highly-optimized hashing algorithms. It leverages GPU acceleration to achieve high speeds, supports various hash types (MD5, SHA, bcrypt, etc.), and offers multiple attack modes including dictionary, rule-based, brute-force, and hybrid attacks."
+                },
+                {
+                    front: "What is theHarvester and how is it used in reconnaissance?",
+                    back: "theHarvester is an OSINT tool used to gather email accounts, subdomain names, virtual hosts, open ports, and employee names from different public sources like search engines and PGP key servers. It helps in the reconnaissance phase by creating a profile of the target organization's digital footprint without actively engaging with target systems."
                 }
             ],
             attacks: [
@@ -488,7 +562,7 @@
                 },
                 {
                     front: "How to prevent XSS attacks?",
-                    back: "Prevent XSS by: contextual output encoding/escaping, using Content Security Policy (CSP), validating input, sanitizing HTML output, using auto-escaping template systems, using HttpOnly flag for cookies, implementing XSS filters, and using modern frameworks that automatically escape output."
+                    back: "Mitigation: Implement contextual output encoding/escaping based on where the data will be placed (HTML, JavaScript, URL, CSS), use Content Security Policy (CSP), validate input on server side, sanitize HTML output with libraries, use auto-escaping template systems, enable HttpOnly flag for cookies, implement XSS filters, and use modern frameworks that automatically escape output."
                 },
                 {
                     front: "What is SQL Injection?",
@@ -500,7 +574,7 @@
                 },
                 {
                     front: "How to prevent SQL Injection?",
-                    back: "Use parameterized queries (prepared statements), stored procedures, input validation, ORM frameworks, escaping user inputs, principle of least privilege for database accounts, and WAF. Never concatenate user input directly into SQL strings."
+                    back: "Mitigation: Use parameterized queries (prepared statements) that clearly separate code from data, implement stored procedures, validate input on the server side, use ORM frameworks that handle parameter binding, escape user inputs using database-specific escaping functions, implement least privilege principle for database accounts, and deploy WAF for additional protection."
                 },
                 {
                     front: "What is Cross-Site Request Forgery (CSRF)?",
@@ -508,7 +582,7 @@
                 },
                 {
                     front: "How to prevent CSRF attacks?",
-                    back: "Use anti-CSRF tokens (csrf_token) in forms, implement SameSite cookie attribute, check Referer and Origin headers, use custom request headers (X-Requested-With), require reauthentication for sensitive operations, and implement CORS properly."
+                    back: "Mitigation: Implement anti-CSRF tokens (unique tokens embedded in forms), use SameSite cookie attribute (set to 'Strict' or 'Lax'), verify the Referer and Origin headers, implement custom request headers (like X-Requested-With), require reauthentication for sensitive operations, and implement proper CORS configuration to control cross-origin requests."
                 },
                 {
                     front: "What is a Man-in-the-Middle (MitM) attack?",
@@ -516,7 +590,7 @@
                 },
                 {
                     front: "How to prevent Man-in-the-Middle attacks?",
-                    back: "Implement strong encryption (TLS/SSL), certificate pinning, use HSTS (HTTP Strict Transport Security), public key infrastructure (PKI), multi-factor authentication, and VPNs. Always verify the authenticity of digital certificates and be wary of certificate warnings."
+                    back: "Mitigation: Implement strong encryption (TLS/SSL) for all communications, use certificate pinning in applications, enable HSTS (HTTP Strict Transport Security) to force HTTPS, implement proper certificate validation, use VPNs for sensitive communications, employ multi-factor authentication, and educate users about public network risks and certificate warnings."
                 },
                 {
                     front: "What is a Denial of Service (DoS) attack?",
@@ -525,6 +599,10 @@
                 {
                     front: "What is a Distributed Denial of Service (DDoS) attack?",
                     back: "A DDoS attack is a type of DoS attack where multiple compromised systems (often infected with a Trojan) are used to target a single system. Unlike a simple DoS attack, DDoS attacks use multiple attack vectors, making them much harder to mitigate."
+                },
+                {
+                    front: "How to prevent or mitigate DDoS attacks?",
+                    back: "Mitigation: Implement rate limiting, use traffic filtering (blackhole routing, sinkhole routing), deploy load balancers for distribution, utilize CDNs to absorb traffic, increase bandwidth capacity (overprovision), configure timeouts properly, implement anti-DDoS hardware or services, develop traffic pattern analysis, and create a DDoS response plan."
                 },
                 {
                     front: "What are common types of DDoS attacks?",
@@ -536,7 +614,7 @@
                 },
                 {
                     front: "How to prevent XXE attacks?",
-                    back: "Disable XML external entity and DTD processing in XML parsers, implement whitelisting server-side input validation and filtering, patch or upgrade XML processors and libraries, use less complex data formats like JSON if possible, and implement WAF rules to detect XXE."
+                    back: "Mitigation: Disable XML external entity and DTD processing in XML parsers, implement server-side input validation with allowlists, patch or upgrade XML processors and libraries, use less complex data formats like JSON where possible, implement WAF rules to detect XXE, and verify that XML processors are configured securely with default entity resolution disabled."
                 },
                 {
                     front: "What is a Path Traversal attack?",
@@ -544,7 +622,7 @@
                 },
                 {
                     front: "How to prevent Path Traversal attacks?",
-                    back: "Validate and sanitize user input, use proper access controls and file permissions, implement whitelisting for file paths and names, avoid passing user-supplied input to filesystem APIs, use chrooted environments, and normalize paths before validation."
+                    back: "Mitigation: Validate and sanitize user input (particularly file paths), use proper access controls and file permissions, implement allowlisting for file paths and names, normalize paths before validation, avoid passing user-supplied input directly to filesystem APIs, use chrooted environments when possible, and implement appropriate web server security configurations."
                 },
                 {
                     front: "What is Insecure Deserialization?",
@@ -552,7 +630,7 @@
                 },
                 {
                     front: "How to prevent Insecure Deserialization vulnerabilities?",
-                    back: "Implement integrity checks like digital signatures on serialized objects, enforce strict type constraints during deserialization, isolate deserialization in low-privilege environments, log and monitor deserialization exceptions, and restrict or encrypt network connectivity for serialization processes."
+                    back: "Mitigation: Implement integrity checks like digital signatures on serialized objects, enforce strict type constraints during deserialization, isolate deserialization in low-privilege environments, log and monitor deserialization exceptions, and restrict network connectivity for serialization processes. Consider using safer data formats like JSON and avoiding native serialization formats."
                 },
                 {
                     front: "What is a Business Logic Attack?",
@@ -563,12 +641,16 @@
                     back: "Price manipulation, bypassing purchasing processes, abuse of free trial functionality, exploitation of referral systems, transaction/shopping cart tampering, circumventing access controls, abusing password recovery flows, and exploiting race conditions in time-sensitive operations."
                 },
                 {
+                    front: "How to prevent Business Logic Attacks?",
+                    back: "Mitigation: Conduct thorough threat modeling, implement proper validation of all inputs, verify that business rules are enforced consistently across all components, enforce proper authentication and authorization, implement appropriate rate limits, integrate application monitoring and alert systems, conduct business logic-focused testing, and review edge cases in workflows."
+                },
+                {
                     front: "What is a Clickjacking attack?",
                     back: "Clickjacking (UI redressing) is an attack where users are tricked into clicking on actionable content on a hidden website by having it disguised as part of the content of another website they're viewing. The attacker loads the target website in a transparent iframe overlaid on a decoy website."
                 },
                 {
                     front: "How to prevent Clickjacking attacks?",
-                    back: "Implement X-Frame-Options or Content-Security-Policy (frame-ancestors) HTTP headers to prevent your site from being framed, use frame-busting JavaScript, require user interaction beyond a single click for sensitive actions, and implement proper CSRF protections."
+                    back: "Mitigation: Implement X-Frame-Options HTTP header (DENY or SAMEORIGIN) or Content-Security-Policy with frame-ancestors directive to prevent your site from being framed, use frame-busting JavaScript as a secondary defense, require user interaction beyond a single click for sensitive actions, and implement proper CSRF protections to complement anti-framing measures."
                 },
                 {
                     front: "What is a Server-Side Request Forgery (SSRF) attack?",
@@ -579,12 +661,24 @@
                     back: "Remote Code Execution refers to a vulnerability that allows an attacker to execute arbitrary code on a target machine remotely. These are among the most severe vulnerabilities as they can lead to complete system compromise, data theft, and installation of malware or backdoors."
                 },
                 {
+                    front: "How can an attacker exploit Remote Code Execution vulnerabilities?",
+                    back: "Attackers can exploit RCE through various vectors: command injection, deserialization flaws, file upload vulnerabilities, buffer overflows, using vulnerable dependencies with known RCE flaws, template injection, and server-side includes. Once exploited, attackers can execute system commands, install backdoors, or establish persistence."
+                },
+                {
                     front: "What is a Race Condition vulnerability?",
                     back: "A race condition occurs when multiple processes access and manipulate the same data concurrently, and the outcome depends on the relative timing of their execution. In security contexts, attackers can exploit the time gap between checking and using a resource to manipulate the system state."
                 },
                 {
                     front: "What is a Buffer Overflow attack?",
                     back: "A buffer overflow occurs when a program tries to store more data in a buffer (temporary storage area) than it can hold. Attackers can use this to overwrite adjacent memory, potentially changing other data, hijacking program control flow, or causing crashes. Common in programs written in C and C++."
+                },
+                {
+                    front: "What are some types of HTTP response splitting attacks?",
+                    back: "HTTP response splitting occurs when attacker-controlled input is included in an HTTP response header without appropriate validation. Types include: Response splitting (creates two responses from one request), Response smuggling (sends hidden response to client), and Cache poisoning (poisons proxy cache with malicious content)."
+                },
+                {
+                    front: "What are common web cache poisoning techniques?",
+                    back: "Web cache poisoning techniques include: Unkeyed header attacks (exploiting headers not used in cache keys), Parameter cloaking (hiding attack payload in request parameters), Cache key normalization issues (exploiting inconsistent handling of URLs), HTTP request smuggling combined with caching, and exploiting cache implementation flaws."
                 }
             ],
             bestpractices: [
@@ -607,6 +701,10 @@
                 {
                     front: "What is the importance of proper error handling?",
                     back: "Proper error handling prevents applications from revealing sensitive information in error messages. Detailed error messages can expose implementation details, stack traces, database structures, or other internal workings that attackers can use to plan more targeted attacks."
+                },
+                {
+                    front: "What steps should be taken for secure error handling?",
+                    back: "Implement generic error messages for users while logging detailed errors server-side, use custom error pages, avoid revealing system information, version numbers, or stack traces in production, establish different handling for different error types, log errors securely with proper context, and implement graceful failure that maintains security controls."
                 },
                 {
                     front: "What is the difference between hashing and encryption?",
@@ -667,6 +765,26 @@
                 {
                     front: "What are some secure password storage practices?",
                     back: "Use strong adaptive hashing algorithms (bcrypt, Argon2, PBKDF2), add unique salts to passwords before hashing, implement proper key stretching with work factors, store hashes rather than plaintext passwords, use pepper (secret key) for additional security, and enforce strong password policies."
+                },
+                {
+                    front: "What is Secure Coding and why is it important?",
+                    back: "Secure coding involves writing code that's resistant to attack, following principles like input validation, proper authentication, error handling, and secure defaults. It's important because security vulnerabilities are often introduced at the code level, and retrofitting security is more expensive and less effective than building it in from the beginning."
+                },
+                {
+                    front: "What is the principle of minimizing attack surface?",
+                    back: "Minimizing attack surface involves reducing the number of entry points and exposed components available to attackers. This includes removing unnecessary features, closing unused ports, disabling unneeded services, limiting user privilege, reducing code complexity, and decreasing the amount of exposed code or API endpoints."
+                },
+                {
+                    front: "What is privilege separation?",
+                    back: "Privilege separation involves dividing a system into components with different privilege levels, where each component has only the privileges it needs to function. This limits the impact of a security breach, as a compromise in one component doesn't automatically grant access to the entire system."
+                },
+                {
+                    front: "What is the 'secure by default' principle?",
+                    back: "Secure by default means that the default configuration of a system or application should be the most secure configuration possible. Users shouldn't have to take additional steps to secure the system; instead, they should have to explicitly choose to reduce security if they need less restrictive functionality."
+                },
+                {
+                    front: "What are security controls and what are the different types?",
+                    back: "Security controls are safeguards designed to reduce security risks. Types include: Preventive controls (prevent incidents), Detective controls (identify incidents), Corrective controls (restore after incidents), Administrative controls (policies/procedures), Technical controls (hardware/software mechanisms), and Physical controls (facility/environmental protections)."
                 }
             ],
             appsec: [
@@ -683,8 +801,16 @@
                     back: "Web Cache Poisoning exploits the behavior of web servers and caches to serve malicious content to users. The attacker sends a request that causes the application to store some form of malicious content in the cache, which is then served to other users requesting the same resource."
                 },
                 {
+                    front: "How can you prevent Web Cache Poisoning attacks?",
+                    back: "Mitigation: Configure caching keys properly (include all inputs that affect response generation), implement proper cache key normalization, avoid caching dynamic content, validate and sanitize all inputs (even those not in cache keys), set proper Cache-Control headers, use HTTPS, and regularly scan and test caching behavior for vulnerabilities."
+                },
+                {
                     front: "What is prototype pollution in JavaScript?",
                     back: "Prototype pollution is a vulnerability where an attacker is able to modify the JavaScript object prototype (Object.prototype). Since all JavaScript objects inherit from this base prototype, this can affect the behavior of all objects in the application, potentially leading to XSS, application logic bypasses, or other security issues."
+                },
+                {
+                    front: "How can you prevent prototype pollution vulnerabilities?",
+                    back: "Mitigation: Freeze Object.prototype (Object.freeze(Object.prototype)), use Map instead of plain objects for user-controlled keys, validate user input thoroughly, use objects without prototype (Object.create(null)), avoid recursive merging of untrusted objects, use libraries that protect against prototype pollution, and implement proper JSON schema validation."
                 },
                 {
                     front: "What is the purpose of a CSP nonce?",
@@ -699,6 +825,10 @@
                     back: "CORS is a mechanism that allows a server to indicate which origins, other than its own, are permitted to load resources from it. It relaxes the Same-Origin Policy in controlled ways, allowing specific cross-origin requests while rejecting others, based on HTTP headers like Access-Control-Allow-Origin."
                 },
                 {
+                    front: "What security issues can arise from improper CORS configuration?",
+                    back: "Improper CORS configuration can lead to: unauthorized access to sensitive data if Access-Control-Allow-Origin is too permissive, especially with Access-Control-Allow-Credentials enabled; CSRF vulnerabilities if wildcard origins are allowed; information leakage; and potential for client-side attacks if vulnerable domains are whitelisted."
+                },
+                {
                     front: "What is HSTS (HTTP Strict Transport Security)?",
                     back: "HSTS is a web security policy mechanism that helps protect websites against protocol downgrade attacks and cookie hijacking. It allows web servers to declare that browsers should interact with them only using secure HTTPS connections, and never via the insecure HTTP protocol."
                 },
@@ -707,16 +837,32 @@
                     back: "A subdomain takeover vulnerability occurs when a subdomain points to a service (like GitHub Pages, Heroku, etc.) that has been removed or deleted. An attacker can set up an account on the same service and claim the subdomain, allowing them to serve content under the organization's domain name."
                 },
                 {
+                    front: "How do you prevent subdomain takeover vulnerabilities?",
+                    back: "Mitigation: Regularly audit DNS records and remove unused subdomains, implement DNS monitoring for changes, use services that protect against subdomain takeover, verify ownership periodically, implement proper deprovisioning procedures when removing services, use strong CNAME verification, and consider DNSSEC for DNS integrity protection."
+                },
+                {
                     front: "What are JWT (JSON Web Tokens) and what security concerns do they present?",
                     back: "JWTs are encoded JSON objects used for transmitting information securely. Security concerns include: improper signature validation, weak encryption keys, accepting 'none' algorithm, not checking the expiration, token stealing via XSS, and storing sensitive data in unencrypted JWTs."
+                },
+                {
+                    front: "How can JWT security be improved?",
+                    back: "Mitigation: Validate signatures properly, reject 'none' algorithm, use strong keys, implement proper expiration (exp) and issuance time (iat) validation, add audience validation (aud), implement proper key rotation, avoid storing sensitive data in payload, use secure storage on client side, and implement token revocation mechanisms when needed."
                 },
                 {
                     front: "What is NoSQL injection?",
                     back: "NoSQL injection is a vulnerability where attackers can inject malicious code into queries for NoSQL databases like MongoDB. Instead of using SQL syntax, attackers may use JavaScript-based query selectors, JSON, or other formats depending on the database, allowing them to bypass authentication or access unauthorized data."
                 },
                 {
+                    front: "How can NoSQL injection be prevented?",
+                    back: "Mitigation: Use parameterized queries or query builders that handle escaping, validate and sanitize user input with strong typing, implement least privilege for database users, use appropriate data serialization methods, avoid JavaScript evaluation in queries, use input sanitization libraries specific to your NoSQL database, and implement proper authentication controls."
+                },
+                {
                     front: "What is GraphQL and what security considerations does it present?",
                     back: "GraphQL is a query language for APIs. Security considerations include: potential for complex queries causing DoS, overfetching or underfetching data, bypassing access controls through nested queries, injection attacks in queries, lack of rate limiting, and exposing system information through error messages."
+                },
+                {
+                    front: "How can GraphQL APIs be secured?",
+                    back: "Mitigation: Implement query depth limiting, use query complexity analysis, implement proper authorization at field and object levels, set timeouts for queries, use input validation with sanitization, implement rate limiting, disable introspection in production, use proper error handling that doesn't leak information, and consider persisted queries for production."
                 },
                 {
                     front: "What is SSRF (Server-Side Request Forgery) and how can it be mitigated?",
@@ -731,8 +877,16 @@
                     back: "HTTP request smuggling exploits differences in how frontend and backend servers process HTTP requests. Attackers craft ambiguous requests that pass through the front server but are interpreted differently by the backend, allowing them to 'smuggle' requests that bypass security controls."
                 },
                 {
+                    front: "How can HTTP request smuggling attacks be prevented?",
+                    back: "Mitigation: Use the same web server software for front and back servers when possible, configure servers to use the same HTTP parsing technique, disable reuse of backend connections, implement HTTP/2 where possible, set explicit Content-Length or Transfer-Encoding headers, patch front and back servers regularly, and validate Content-Length headers properly."
+                },
+                {
                     front: "What is API security and why is it important?",
                     back: "API security involves protecting APIs from threats like unauthorized access, abuse, DoS, and data exposure. It's important because APIs often provide direct access to sensitive data and functionality, are increasingly used for machine-to-machine communication, and can expose broader attack surfaces than traditional web interfaces."
+                },
+                {
+                    front: "What are key practices for securing APIs?",
+                    back: "Use strong authentication (OAuth 2.0, JWT), implement proper authorization checks, validate all inputs, use HTTPS with proper TLS, implement rate limiting, use proper error handling that doesn't leak information, log API access, monitor for unusual patterns, use API gateways for centralized security controls, and follow OWASP API Security Top 10 guidelines."
                 },
                 {
                     front: "What is a horizontal privilege escalation?",
@@ -741,6 +895,10 @@
                 {
                     front: "What is a vertical privilege escalation?",
                     back: "Vertical privilege escalation occurs when a user obtains access to functionality reserved for more privileged users (e.g., a regular user gaining admin capabilities). This may happen through missing function-level access controls, forced browsing, manipulating parameters, or exploiting vulnerabilities in administrative functions."
+                },
+                {
+                    front: "How can privilege escalation vulnerabilities be prevented?",
+                    back: "Mitigation: Implement proper access controls at all levels, validate authorization for every request, use indirect reference maps instead of direct object references, implement proper session management, use principle of least privilege, audit access logs, conduct regular security testing focusing on access controls, and enforce re-authentication for sensitive actions."
                 },
                 {
                     front: "What is OWASP API Security Top 10?",
@@ -763,6 +921,10 @@
                 {
                     front: "What is asymmetric encryption?",
                     back: "Asymmetric encryption uses a pair of keys: a public key for encryption and a private key for decryption. It solves the key distribution problem of symmetric encryption but is computationally more expensive. Examples include RSA, ECC, and DSA."
+                },
+                {
+                    front: "What is a hybrid cryptosystem and why is it used?",
+                    back: "A hybrid cryptosystem combines asymmetric and symmetric encryption to leverage the advantages of both. It uses asymmetric encryption to securely exchange a symmetric key, then uses that symmetric key for efficient bulk data encryption. This approach is used in TLS/SSL and secure messaging applications for better performance while maintaining security."
                 },
                 {
                     front: "What is a hash function?",
@@ -827,6 +989,22 @@
                 {
                     front: "What is AES?",
                     back: "AES (Advanced Encryption Standard) is a symmetric encryption algorithm adopted by the U.S. government. It operates on fixed block sizes of 128 bits using key lengths of 128, 192, or 256 bits. AES is considered secure and efficient, and is widely used for data encryption."
+                },
+                {
+                    front: "What is a cryptographic nonce?",
+                    back: "A nonce (number used once) is a random or pseudo-random number used only once in a cryptographic communication. Nonces prevent replay attacks by ensuring that old communications cannot be reused. They're used in authentication protocols, encryption, and to prevent CSRF attacks."
+                },
+                {
+                    front: "What is Elliptic Curve Cryptography (ECC)?",
+                    back: "ECC is an approach to asymmetric cryptography based on the algebraic structure of elliptic curves over finite fields. It offers equivalent security to RSA with much shorter key lengths, making it more efficient for mobile and low-power applications. Common ECC algorithms include ECDSA and ECDH."
+                },
+                {
+                    front: "What is a Public Key Infrastructure (PKI)?",
+                    back: "PKI is a framework of roles, policies, hardware, software, and procedures to create, manage, distribute, use, store, and revoke digital certificates. It binds public keys with identities through a certificate authority, enabling secure communications and digital signatures in environments where parties don't directly know each other."
+                },
+                {
+                    front: "What is a Key Derivation Function (KDF)?",
+                    back: "A KDF derives one or more secret keys from a secret value such as a master key, password, or passphrase. KDFs can serve multiple purposes: slowing down brute-force attacks (PBKDF2, bcrypt), generating multiple keys from one secret (HKDF), and producing keys of specific lengths required by various algorithms."
                 }
             ],
             authentication: [
@@ -847,12 +1025,20 @@
                     back: "OAuth 2.0 is an authorization protocol (controlling what resources a client can access). OpenID Connect adds an identity layer on top of OAuth 2.0, providing authentication (verifying who a user is). OIDC includes standard fields for user information and an ID token (JWT) containing identity data."
                 },
                 {
+                    front: "What are the different OAuth 2.0 grant types and when to use each?",
+                    back: "Authorization Code: for server-side apps, most secure. Implicit: for browser-based apps (deprecated). Resource Owner Password: for trusted apps with direct access to credentials. Client Credentials: for server-to-server, no user involved. Device Code: for input-constrained devices. Refresh Token: to get new access tokens without re-authentication."
+                },
+                {
                     front: "What is SAML?",
                     back: "SAML (Security Assertion Markup Language) is an XML-based framework for exchanging authentication and authorization data between parties, particularly between an identity provider and a service provider. It's commonly used for Single Sign-On (SSO) in enterprise environments."
                 },
                 {
                     front: "What is Single Sign-On (SSO)?",
                     back: "Single Sign-On is an authentication scheme that allows users to log in once and gain access to multiple systems without being prompted to log in again. It centralizes authentication, improving user experience and security by reducing password fatigue and centralizing access control."
+                },
+                {
+                    front: "What are the security benefits and risks of SSO?",
+                    back: "Benefits: reduced password fatigue, centralized control, consistent security policies, simpler access management, faster login. Risks: single point of failure (compromise of SSO means access to all integrated systems), complexity of implementation, increased impact of session hijacking, and potential vendor lock-in."
                 },
                 {
                     front: "What is session-based authentication?",
@@ -877,6 +1063,10 @@
                 {
                     front: "What is ABAC (Attribute-Based Access Control)?",
                     back: "ABAC makes access decisions based on attributes of the user, resource, action, and environment. Unlike RBAC, which is based on predefined roles, ABAC allows for more dynamic and fine-grained access control based on various characteristics and conditions at the time of access."
+                },
+                {
+                    front: "How does ABAC differ from RBAC, and what are its advantages?",
+                    back: "ABAC is more flexible than RBAC, using dynamic attributes (user properties, resource properties, environmental conditions) rather than static roles. Advantages: more granular control, contextual decisions (time, location), better handling of complex relationships, reduced administrative overhead for fine-grained permissions, and adaptability to changing conditions without restructuring roles."
                 },
                 {
                     front: "What is passwordless authentication?",
@@ -909,6 +1099,14 @@
                 {
                     front: "What is the risk of relying on security questions for account recovery?",
                     back: "Security questions are problematic because: answers may be publicly available (social media, public records), answers can change over time, questions often have limited or predictable answers, and they're vulnerable to social engineering. Better alternatives include email verification codes, backup codes, or recovery via trusted contacts."
+                },
+                {
+                    front: "What is credential stuffing and how is it different from brute force?",
+                    back: "Credential stuffing uses stolen username/password pairs from one service to attempt login on other services, exploiting password reuse. Unlike brute force (which tries many passwords for one account), credential stuffing tries known credentials across many accounts. It's more efficient and harder to detect because each account receives few login attempts."
+                },
+                {
+                    front: "What is account enumeration and how can it be prevented?",
+                    back: "Account enumeration allows attackers to determine valid usernames by observing different responses (error messages, timing, etc.). Prevention includes: using consistent messages regardless of whether username exists, implementing rate limiting, adding CAPTCHAs after failed attempts, and ensuring consistent response times for valid and invalid accounts."
                 }
             ],
             mobile: [
@@ -935,6 +1133,10 @@
                 {
                     front: "What security risks are specific to iOS applications?",
                     back: "Insecure data storage in plist files or Keychain with improper access controls, lack of proper certificate validation, insecure URL handling, app transport security (ATS) bypass, improper use of touch/face ID, jailbreak detection bypasses, and client-side injection vulnerabilities."
+                },
+                {
+                    front: "What is App Transport Security (ATS) in iOS?",
+                    back: "ATS is a security feature in iOS that enforces secure connections between an app and backend services. It requires that all HTTP connections use HTTPS with TLS 1.2+, forward secrecy, and strong ciphers. By default, apps cannot make insecure HTTP connections unless explicitly configured with exceptions in the Info.plist file."
                 },
                 {
                     front: "What is app signing and why is it important?",
@@ -977,6 +1179,10 @@
                     back: "WebViews display web content within apps. Security concerns include: JavaScript injection, improper handling of file access, insecure bridge implementations between JavaScript and native code, lack of certificate validation, loading content over HTTP, and enabling dangerous WebView settings like JavaScript interfaces without proper validation."
                 },
                 {
+                    front: "What are some WebView security best practices?",
+                    back: "Disable JavaScript if not needed, validate all inputs and outputs between WebView and native code, disable file access, implement proper SSL/TLS validation, don't allow loading content from arbitrary sources, use HTTPS only, disable geolocation and other sensitive APIs if not required, and limit JavaScript bridge functionality to only what's necessary."
+                },
+                {
                     front: "What is secure communication in mobile applications?",
                     back: "Secure communication involves: enforcing HTTPS for all network communication, implementing certificate pinning, validating server certificates properly, encrypting sensitive data before transmission, avoiding sensitive data in URLs, and implementing proper session management."
                 },
@@ -991,6 +1197,218 @@
                 {
                     front: "How can apps protect against reverse engineering?",
                     back: "Protection methods include: code obfuscation (renaming variables/functions, control flow obfuscation), native code usage (harder to decompile than Java/Swift), string encryption, anti-debugging techniques, integrity checks, and tamper detection. Complete protection is impossible, but these techniques increase the difficulty."
+                },
+                {
+                    front: "What is the Android Keystore system?",
+                    back: "The Android Keystore system stores cryptographic keys in a container, making them more difficult to extract from the device. It allows apps to create and use keys that never enter the application process. Hardware-backed keystores provide additional security by performing operations in secure hardware (TEE or SE) rather than in normal device memory."
+                },
+                {
+                    front: "What is the iOS Keychain?",
+                    back: "The iOS Keychain is a secure encrypted database for storing sensitive information such as passwords, cryptographic keys, and certificates. Apps can store data with different accessibility and protection levels. The Keychain is protected by the device's security hardware and can be configured to require device unlocking or biometric authentication before access."
+                }
+            ],
+            "ssl-tls": [
+                {
+                    front: "What is the difference between SSL and TLS?",
+                    back: "SSL (Secure Sockets Layer) is the predecessor to TLS (Transport Layer Security). TLS is more secure and has replaced SSL. All SSL versions (1.0, 2.0, 3.0) are now deprecated due to serious vulnerabilities. Current secure implementations use TLS 1.2 or 1.3. The terms are often used interchangeably in common speech, though technically incorrect."
+                },
+                {
+                    front: "What happens during the TLS handshake?",
+                    back: "1) Client sends ClientHello with supported cipher suites and highest TLS version. 2) Server responds with ServerHello, certificate, cipher selection, and optional server key exchange. 3) Client verifies certificate, sends key exchange information. 4) Both generate session keys. 5) Both send Finished messages encrypted with session keys. After successful handshake, secure communication begins using the negotiated keys."
+                },
+                {
+                    front: "What are cipher suites and why are they important?",
+                    back: "Cipher suites are sets of algorithms for securing network connections through TLS. They specify the key exchange algorithm, bulk encryption algorithm, message authentication code algorithm, and pseudorandom function. Selecting secure cipher suites is crucial as weak ciphers can compromise the entire connection even if the TLS version is current."
+                },
+                {
+                    front: "What are some insecure ciphers that should be avoided?",
+                    back: "Insecure ciphers include: NULL ciphers (no encryption), anonymous ciphers (no authentication), export-grade ciphers (deliberately weakened), RC4 (broken stream cipher), DES/3DES (vulnerable to various attacks), MD5/SHA1 for message integrity (cryptographically broken), and RSA key exchange without Perfect Forward Secrecy."
+                },
+                {
+                    front: "What is Perfect Forward Secrecy (PFS) and why is it important?",
+                    back: "Perfect Forward Secrecy ensures that session keys won't be compromised even if the server's private key is compromised. It uses ephemeral key exchanges (like DHE or ECDHE) to generate unique session keys for each connection. If a private key is later compromised, it cannot be used to decrypt past communications because the session keys were never stored or transmitted."
+                },
+                {
+                    front: "What is the difference between TLS 1.2 and TLS 1.3?",
+                    back: "TLS 1.3 improvements include: reduced handshake latency (1-RTT or 0-RTT), removal of all legacy/insecure algorithms (MD5, SHA-1, RC4, DES, 3DES), mandatory Perfect Forward Secrecy, simplified cipher suite negotiation, encrypted handshake (for better privacy), and more secure key derivation functions. TLS 1.3 is both faster and more secure."
+                },
+                {
+                    front: "What is Certificate Transparency (CT) and why is it important?",
+                    back: "Certificate Transparency is a framework for monitoring and auditing SSL/TLS certificates. It requires certificates to be logged in public, append-only logs, allowing domain owners to detect misissued certificates. It helps prevent attacks using fraudulent certificates by increasing visibility and oversight of Certificate Authorities (CAs)."
+                },
+                {
+                    front: "What is OCSP (Online Certificate Status Protocol)?",
+                    back: "OCSP is a protocol for checking the revocation status of X.509 digital certificates. Instead of downloading complete Certificate Revocation Lists (CRLs), clients can query the CA about specific certificates. OCSP provides more timely revocation information but introduces privacy concerns and potential performance bottlenecks."
+                },
+                {
+                    front: "What is OCSP stapling and what problems does it solve?",
+                    back: "OCSP stapling allows the server to periodically obtain its own OCSP response from the CA and include (\"staple\") it in the TLS handshake. This solves privacy issues (clients don't need to contact the CA directly), improves performance (reduces handshake time), and eliminates the OCSP responder as a single point of failure."
+                },
+                {
+                    front: "What is SNI (Server Name Indication) and why is it needed?",
+                    back: "SNI is a TLS extension that allows a client to specify the hostname it's trying to connect to at the beginning of the handshake. This enables servers to host multiple HTTPS websites on a single IP address with different certificates. Without SNI, servers would need a unique IP for each HTTPS domain, which isn't scalable with IPv4 address exhaustion."
+                },
+                {
+                    front: "What are some common SSL/TLS vulnerabilities?",
+                    back: "Common vulnerabilities include: BEAST (TLS 1.0 CBC vulnerability), POODLE (padding oracle attack on SSLv3), FREAK (forcing weak export ciphers), Heartbleed (OpenSSL buffer over-read), CRIME/BREACH (compression-related info leakage), Logjam (weakening of Diffie-Hellman), ROBOT (Bleichenbacher attack variant), and Sweet32 (birthday attacks on 64-bit block ciphers)."
+                },
+                {
+                    front: "What is the Heartbleed vulnerability?",
+                    back: "Heartbleed (CVE-2014-0160) was a serious vulnerability in OpenSSL that allowed attackers to read memory from the server, potentially exposing private keys, passwords, and other sensitive data. It exploited a buffer over-read bug in the TLS heartbeat extension, allowing attackers to retrieve up to 64KB of server memory per request without leaving any trace."
+                },
+                {
+                    front: "What is certificate pinning and when should it be used?",
+                    back: "Certificate pinning involves hardcoding or storing expected certificate information in an application, preventing connections to endpoints with different certificates even if they're trusted by the OS. It should be used in high-security applications, especially mobile apps, to prevent man-in-the-middle attacks even if the device's trust store is compromised."
+                },
+                {
+                    front: "What is HTTP Strict Transport Security (HSTS) and how does it work?",
+                    back: "HSTS is a security policy that forces browsers to use HTTPS instead of HTTP when communicating with a website. A server sends the Strict-Transport-Security header to instruct browsers to only connect via HTTPS for a specified period. This protects against protocol downgrade attacks and cookie hijacking, as browsers will automatically convert HTTP requests to HTTPS."
+                },
+                {
+                    front: "What is the difference between self-signed certificates and CA-signed certificates?",
+                    back: "Self-signed certificates are created and signed by the website owner, not a trusted CA. While they provide encryption, browsers don't trust them by default, showing security warnings. CA-signed certificates are issued by trusted third parties who validate the requestor's identity, providing both encryption and authentication. Self-signed certificates are suitable for testing or internal systems only."
+                },
+                {
+                    front: "What is a wildcard certificate?",
+                    back: "A wildcard certificate secures a domain and all its first-level subdomains. For example, a certificate for *.example.com covers www.example.com, mail.example.com, etc., but not sub.other.example.com. Wildcard certificates simplify certificate management but may present increased security risk if compromised, as they affect multiple subdomains."
+                },
+                {
+                    front: "What are the components of an X.509 certificate?",
+                    back: "X.509 certificates include: version number, serial number, signature algorithm ID, issuer name, validity period (not before/after dates), subject name, subject public key info, certificate extensions (key usage, extended key usage, subject alternative names), and the certificate authority's digital signature."
+                },
+                {
+                    front: "What is an SSL/TLS inspection proxy and what security considerations does it raise?",
+                    back: "An SSL/TLS inspection proxy (or HTTPS interception proxy) decrypts, inspects, and re-encrypts HTTPS traffic to monitor content. Security considerations include: undermining the end-to-end encryption promise, potentially weakening security if implemented poorly, privacy concerns, certificate management issues, and potentially breaking certificate pinning in applications."
+                },
+                {
+                    front: "What is TLS downgrade attack and how is it mitigated?",
+                    back: "A TLS downgrade attack forces a connection to use older, vulnerable protocols or weaker cipher suites by manipulating the handshake process. Mitigations include: disabling legacy protocols (SSL 2.0/3.0, TLS 1.0/1.1), implementing TLS_FALLBACK_SCSV to prevent protocol downgrade, using HSTS, configuring secure cipher suite preferences, and enabling certificate pinning in applications."
+                },
+                {
+                    front: "What is Extended Validation (EV) certificate and how does it differ from standard certificates?",
+                    back: "Extended Validation certificates require a rigorous verification process of the requesting entity's identity. The CA must verify legal existence, physical existence, operational existence, and exclusive domain ownership. Traditionally, browsers displayed EV certificates differently (with organization name in green), though many browsers have removed these visual indicators in recent versions."
+                },
+                {
+                    front: "How do you properly configure a server for secure TLS implementation?",
+                    back: "Secure TLS configuration includes: supporting only TLS 1.2+ (disabling SSL 2.0/3.0, TLS 1.0/1.1), enabling strong cipher suites with Perfect Forward Secrecy, configuring proper key and certificate management, implementing HSTS, OCSP stapling, setting secure protocol options, using proper certificate chain, configuring secure renegotiation, and regular security testing/updates."
+                },
+                {
+                    front: "What is Diffie-Hellman key exchange and why is it important for TLS?",
+                    back: "Diffie-Hellman is a method that allows two parties to generate a shared secret over an insecure channel without exchanging the actual key. In TLS, it enables Perfect Forward Secrecy by generating ephemeral session keys that aren't derived from the server's private key. DHE (ephemeral DH) or ECDHE (elliptic curve DHE) ensure that past communications remain secure even if the private key is later compromised."
+                },
+                {
+                    front: "What are the security implications of TLS 1.3's 0-RTT (Zero Round Trip Time) feature?",
+                    back: "0-RTT allows clients to send data on the first message to the server, reducing latency. Security implications include: potential replay attacks (as the server can't guarantee uniqueness of early data), lack of forward secrecy for 0-RTT data (uses keys derived from previous sessions), and challenges implementing proper replay protection. It should be used only for non-sensitive, idempotent requests."
+                },
+                {
+                    front: "What are Certificate Revocation Lists (CRLs) and what problems do they present?",
+                    back: "CRLs are lists of certificates that have been revoked before their expiration date, published by CAs. Problems include: potential large size leading to performance issues, infrequent updates creating security gaps, availability concerns (if CRL server is down), privacy issues (revealing browsing habits), and caching issues that may allow temporarily accepting revoked certificates."
+                },
+                {
+                    front: "What is SSL/TLS session resumption and what are the different methods?",
+                    back: "Session resumption allows clients to reconnect to servers without performing a full TLS handshake, improving performance. Methods include: Session IDs (server stores session parameters), Session Tickets (server encrypts session data and sends to client for storage), and TLS 1.3's PSK (Pre-Shared Key) mode which improves on previous methods with better security properties."
+                }
+            ],
+            pentesting: [
+                {
+                    front: "What is penetration testing?",
+                    back: "Penetration testing (pentesting) is a simulated cyber attack against a system to check for exploitable vulnerabilities. Unlike vulnerability scanning, it involves active exploitation of weaknesses to determine the potential damage an attacker could cause. It helps organizations identify and prioritize risks that automated scanning might miss or incorrectly assess."
+                },
+                {
+                    front: "What are the different phases of a penetration test?",
+                    back: "1) Planning & Reconnaissance: Define scope, gather information about the target. 2) Scanning: Identify vulnerabilities using tools. 3) Gaining Access: Exploit vulnerabilities to penetrate systems. 4) Maintaining Access: Test persistence capabilities. 5) Analysis & Reporting: Document findings, impacts, and remediation recommendations. Some methodologies add additional phases like post-exploitation or cleanup."
+                },
+                {
+                    front: "What is the difference between black box, white box, and gray box penetration testing?",
+                    back: "Black box: Tester has no prior knowledge of the system (simulates external attacker). White box: Complete information is provided (source code, architecture, etc.), simulating an attacker with inside knowledge. Gray box: Partial information is provided (like authenticated user access), simulating insider threat or partially informed attacker."
+                },
+                {
+                    front: "What is active vs. passive reconnaissance?",
+                    back: "Passive reconnaissance involves gathering information without interacting with the target (using public sources, search engines, whois data, social media). Active reconnaissance involves direct interaction with target systems (port scanning, banner grabbing, DNS queries). Passive is stealthier but provides less detailed information; active provides more detailed data but may be detected."
+                },
+                {
+                    front: "What is OSINT and how is it used in penetration testing?",
+                    back: "Open Source Intelligence (OSINT) is gathering information from publicly available sources. In pentesting, it's used to find potential entry points without alerting the target. Sources include: company websites, social media, job postings, DNS records, leaked credentials, search engines, public code repositories, tech forums, and business records."
+                },
+                {
+                    front: "What is the principle of least privilege and why is it important during penetration testing?",
+                    back: "The principle of least privilege means using accounts/processes with only minimal permissions needed to complete tasks. During pentesting, this principle: reduces risk of accidental damage, limits scope of compromise if testing accounts are detected, creates realistic attack conditions (as most attacks begin with limited access), and tests whether proper privilege boundaries exist within the target system."
+                },
+                {
+                    front: "What are port scanning techniques and their differences?",
+                    back: "TCP SYN scan: Stealthier, sends SYN packets without completing handshake. TCP connect: Full connection, easier to detect but more reliable. UDP scan: Tests UDP services, often slower. FIN/XMAS/NULL scans: Send packets with various flags to evade detection. ACK scan: Determines firewall rule sets. Window scan: Detects open ports by TCP window size. Idle scan: Uses third-party to determine port status, very stealthy."
+                },
+                {
+                    front: "What is vulnerability scanning and how does it differ from penetration testing?",
+                    back: "Vulnerability scanning uses automated tools to identify known vulnerabilities in systems. Unlike penetration testing, it doesn't actually exploit vulnerabilities, just identifies them. Scanning is automated, faster, and broader in coverage but produces more false positives and doesn't test impact. Pentesting is more targeted, validates vulnerabilities, and demonstrates actual business risk."
+                },
+                {
+                    front: "What are common web application pentesting tools?",
+                    back: "Common tools include: Burp Suite (proxy interceptor, scanner, fuzzer), OWASP ZAP (similar to Burp, open source), SQLmap (SQL injection), Nikto (web server scanner), Metasploit (exploitation framework), Dirb/Gobuster (directory brute forcing), Wfuzz (web fuzzer), BeEF (browser exploitation), and various browser extensions for security testing."
+                },
+                {
+                    front: "What is credential stuffing and how do you test for it?",
+                    back: "Credential stuffing is using leaked username/password combinations from one breach to attack other sites. Testing involves: configuring a list of known breached credentials, using tools like Burp Intruder or Hydra to automate login attempts, monitoring for successful logins or different error responses, testing rate-limiting and account lockout mechanisms, and verifying whether CAPTCHA or MFA would prevent the attack."
+                },
+                {
+                    front: "What is privilege escalation and what are common techniques?",
+                    back: "Privilege escalation is gaining higher-level permissions than initially granted. Techniques include: exploiting vulnerable services running as high-privilege accounts, misconfigured permissions on files/directories, kernel exploits, path variable manipulation, DLL hijacking, unquoted service paths, stored credentials, token manipulation, insecure GUI applications, and exploiting scheduled tasks with weak permissions."
+                },
+                {
+                    front: "What is lateral movement and why is it important in penetration testing?",
+                    back: "Lateral movement involves pivoting from one compromised system to others within the same network. It's important because it demonstrates how attackers can expand their control beyond the initial entry point, identifies segmentation issues, tests internal trust relationships, and reveals how far an attacker could reach after initial compromise. Techniques include credential theft, pass-the-hash, and exploiting trust relationships."
+                },
+                {
+                    front: "What is a pivot in the context of penetration testing?",
+                    back: "A pivot is using an initially compromised system as a base to attack other systems not directly accessible to the tester. This involves setting up proxies or port forwards through the compromised host to reach otherwise inaccessible network segments. Tools like Metasploit's route command, proxychains, or SSH tunneling are commonly used for pivoting."
+                },
+                {
+                    front: "What is session hijacking and how is it tested?",
+                    back: "Session hijacking involves stealing or impersonating a user's session to gain unauthorized access. Testing includes: intercepting session tokens using proxy tools, analyzing token generation for predictability, checking for transmission over insecure channels, testing token expiration policies, verifying if tokens are properly invalidated after logout, and testing if additional factors (IP, user agent) are validated."
+                },
+                {
+                    front: "What is directory traversal and how do you test for it?",
+                    back: "Directory traversal (path traversal) allows accessing files outside the web root. Testing involves: attempting to access critical files (like /etc/passwd on Linux) using ../ sequences in URL parameters, file paths, or other inputs; trying different encodings to bypass filters (../, .%2e/, %2e%2e%2f); using absolute paths; testing non-standard directory separators; and checking for limiting access to specific directories."
+                },
+                {
+                    front: "What is a race condition vulnerability and how is it tested?",
+                    back: "Race conditions occur when system behavior depends on sequence/timing of events. Testing involves: identifying time-sensitive operations (file operations, state changes, transactions), creating scripts to execute multiple concurrent requests, analyzing application behavior under race conditions, looking for inconsistent results, and focusing on high-value targets like payment processing or access control where timing attacks could have significant impact."
+                },
+                {
+                    front: "What is exploit chaining?",
+                    back: "Exploit chaining combines multiple vulnerabilities to achieve a greater impact than any single vulnerability. For example, using an XSS vulnerability to steal cookies, combined with a CSRF vulnerability to make changes, and an information disclosure vulnerability to discover valuable targets. Chaining demonstrates realistic attack scenarios and shows how seemingly low-risk issues can become critical when combined."
+                },
+                {
+                    front: "What is the difference between vulnerability verification and exploitation?",
+                    back: "Vulnerability verification confirms a weakness exists without fully exploiting it (e.g., confirming SQL injection by causing a time delay or error). Exploitation actively leverages the vulnerability to gain unauthorized access or control (e.g., using SQL injection to extract database contents). Verification is less risky but may not demonstrate actual impact; exploitation shows real business risk but carries more potential for system disruption."
+                },
+                {
+                    front: "What are common evasion techniques used during penetration testing?",
+                    back: "Evasion techniques include: fragmenting packets to bypass IDS/IPS, using encrypted communication channels, timing attacks (slowing scan rates), using proxy chains to hide origin, altering attack signatures, encoding/obfuscating payloads, using non-standard ports for common protocols, modifying packet headers, generating decoy traffic, and using techniques that mimic normal traffic patterns."
+                },
+                {
+                    front: "What is the purpose of post-exploitation in penetration testing?",
+                    back: "Post-exploitation determines what could be accomplished after initial compromise. Objectives include: assessing potential damage, identifying sensitive data accessible, testing lateral movement possibilities, evaluating persistence mechanisms, gathering evidence of compromise extent, testing data exfiltration controls, determining whether compromise can be detected, and identifying further attack vectors available from the compromised position."
+                },
+                {
+                    front: "What is a web application firewall (WAF) bypass?",
+                    back: "WAF bypass techniques circumvent protections designed to block malicious web requests. Methods include: using alternate encodings (hex, unicode, URL, double URL), case manipulation, HTTP parameter pollution, null bytes, comment injection, excessive obfuscation, using HTTP method variations, exploiting WAF misconfigurations, and sending split/fragmented requests where each part looks benign but combines to form an attack."
+                },
+                {
+                    front: "What is Active Directory enumeration?",
+                    back: "Active Directory enumeration involves gathering information about domain structure, users, groups, computers, and security policies. Techniques include: using built-in tools (net commands, PowerShell), LDAP queries, Kerberos user enumeration, SMB enumeration, DNS queries, and specialized tools like BloodHound. The goal is identifying misconfigurations, weak passwords, excessive privileges, or trust relationships that could be exploited."
+                },
+                {
+                    front: "What is a pentest report and what key elements should it include?",
+                    back: "A pentest report documents findings, methodology, and recommendations. Key elements include: executive summary (non-technical overview of critical issues), scope and methodology, detailed findings (with severity ratings, evidence, and reproduction steps), business impact assessment, risk scoring, remediation recommendations with practical steps, strategic recommendations, and appropriate appendices with technical details for different audiences."
+                },
+                {
+                    front: "What ethical considerations should penetration testers follow?",
+                    back: "Ethical considerations include: obtaining proper written authorization before testing, respecting scope limitations, avoiding service disruption, protecting confidentiality of findings, not exfiltrating sensitive data, reporting serious vulnerabilities immediately, not using discovered vulnerabilities for personal gain, documenting actions for accountability, respecting privacy, following responsible disclosure, and maintaining professional integrity throughout the engagement."
+                },
+                {
+                    front: "What is a 'Red Team' assessment and how does it differ from a standard penetration test?",
+                    back: "Red Team assessments simulate real-world attacks across multiple attack vectors with minimal restrictions. Differences from standard penetration tests include: longer timeframes (weeks/months vs. days), wider scope (physical, social engineering, digital), stealth focus (testing detection capabilities), adversary emulation (mimicking specific threat actors), and objectives focused on accessing specific critical assets rather than finding all vulnerabilities."
                 }
             ]
         };
