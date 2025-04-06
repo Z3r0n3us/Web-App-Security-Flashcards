@@ -3,173 +3,1091 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Security Flashcards</title>
+    <title>Web App Security Flashcards</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
+            background-color: #f5f5f7;
+            padding: 20px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 600px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
         }
-        .card {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            padding: 20px;
+        
+        h1 {
+            text-align: center;
+            color: #333;
             margin-bottom: 20px;
-            min-height: 200px;
-            position: relative;
-            cursor: pointer;
-            overflow: hidden;
+            font-size: 24px;
         }
-        .card-front, .card-back {
-            transition: opacity 0.3s, transform 0.3s;
-            backface-visibility: hidden;
-        }
-        .card-back {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            padding: 20px;
-            background-color: white;
-            opacity: 0;
-            transform: translateY(10px);
-            overflow-y: auto;
-        }
-        .flipped .card-front {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        .flipped .card-back {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        
         .controls {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
         }
-        button {
-            background-color: #2c3e50;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
+        
+        select {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background-color: white;
+            font-size: 16px;
+            -webkit-appearance: none;
+        }
+        
+        .flashcard {
+            perspective: 1000px;
+            height: 300px;
+            margin-bottom: 25px;
             cursor: pointer;
         }
-        .category-select {
-            margin-bottom: 20px;
+        
+        .card {
+            position: relative;
             width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .flipped .card {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            overflow-y: auto;
+        }
+        
+        .card-front {
+            background-color: #ffffff;
+            color: #333;
+        }
+        
+        .card-back {
+            background-color: #0071e3;
+            color: white;
+            transform: rotateY(180deg);
+        }
+        
+        .card-content {
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 1.5;
             padding: 10px;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .nav-button {
+            background-color: #0071e3;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: #0058b0;
+        }
+        
+        .counter {
+            text-align: center;
+            margin-top: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 480px) {
+            .card-content {
+                font-size: 18px;
+            }
+            
+            .nav-button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            
+            .flashcard {
+                height: 250px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Web Security Flashcards</h1>
-    
-    <select id="categorySelect" class="category-select">
-        <option value="all">All Categories</option>
-        <option value="owasp">OWASP Top 10</option>
-        <option value="fundamentals">Security Fundamentals</option>
-        <option value="tools">Security Tools</option>
-        <!-- Add more categories as needed -->
-    </select>
-    
-    <div class="controls">
-        <button id="prevBtn">Previous</button>
-        <span id="counter">Card 1 of X</span>
-        <button id="nextBtn">Next</button>
-    </div>
-    
-    <div id="card" class="card">
-        <div class="card-front">
-            <h3 id="question"></h3>
+    <div class="container">
+        <h1>Web App Security Flashcards</h1>
+        
+        <div class="controls">
+            <select id="category-select">
+                <option value="owasp">OWASP Top 10 (2021)</option>
+                <option value="fundamentals">Web Security Fundamentals</option>
+                <option value="tools">Security Testing Tools</option>
+                <option value="attacks">Common Attack Techniques</option>
+                <option value="bestpractices">Security Best Practices</option>
+                <option value="appsec">Application Security</option>
+                <option value="cryptography">Cryptography</option>
+                <option value="authentication">Authentication & Authorization</option>
+                <option value="mobile">Mobile Security</option>
+            </select>
         </div>
-        <div class="card-back">
-            <h3>Answer:</h3>
-            <p id="answer"></p>
+        
+        <div class="flashcard" id="flashcard">
+            <div class="card">
+                <div class="card-front">
+                    <div class="card-content" id="front-content">
+                        Loading question...
+                    </div>
+                </div>
+                <div class="card-back">
+                    <div class="card-content" id="back-content">
+                        Loading answer...
+                    </div>
+                </div>
+            </div>
         </div>
+        
+        <div class="navigation">
+            <button class="nav-button" id="prev-button">Previous</button>
+            <button class="nav-button" id="next-button">Next</button>
+        </div>
+        
+        <div class="counter" id="counter">Card 1 of 10</div>
     </div>
-    
+
     <script>
-        // Your flashcard data - you would replace with your full list
-        const flashcards = [
-            {
-                category: "owasp",
-                question: "What is Broken Access Control?",
-                answer: "Broken Access Control occurs when restrictions on authenticated users are not properly enforced. It allows attackers to access unauthorized functionality or data, such as accessing other users' accounts, viewing sensitive documents, modifying data, or changing access rights."
-            },
-            {
-                category: "owasp",
-                question: "What is Cryptographic Failures?",
-                answer: "Cryptographic Failures relate to failures in cryptography, or the absence of encryption when needed. These vulnerabilities can expose sensitive data such as financial information, healthcare records, or credentials."
-            },
-            // Add more cards here
-        ];
-        
-        // App state
+        // Flashcard data by category
+        const flashcards = {
+            owasp: [
+                {
+                    front: "A01:2021 - What is Broken Access Control?",
+                    back: "Restrictions on authenticated users are not properly enforced. Attackers can exploit these flaws to access unauthorized functionality and/or data, such as accessing other users' accounts, viewing sensitive files, modifying other users' data, or changing access rights."
+                },
+                {
+                    front: "A01:2021 - Give examples of Broken Access Control vulnerabilities.",
+                    back: "Examples include: Insecure Direct Object References (IDOR), path traversal attacks, bypassing access control checks, permission elevation, metadata manipulation (e.g., JWT tampering), CORS misconfiguration, and forcing browsing to authenticated pages as an unauthenticated user."
+                },
+                {
+                    front: "A01:2021 - How to prevent Broken Access Control vulnerabilities?",
+                    back: "Implement proper access controls: deny by default, enforce record ownership, disable directory listing, log access control failures, rate limit API access, invalidate JWTs on logout, implement stateful session management, and use automated testing of access controls."
+                },
+                {
+                    front: "A02:2021 - What are Cryptographic Failures?",
+                    back: "Failures related to cryptography (or lack thereof) that often lead to exposure of sensitive data. This includes failures to encrypt data in transit or at rest, using weak or outdated cryptographic algorithms, and improper key management practices."
+                },
+                {
+                    front: "A02:2021 - Give examples of Cryptographic Failures.",
+                    back: "Examples include: Transmitting data in clear text (HTTP instead of HTTPS), using weak cryptographic algorithms (MD5, SHA1), hardcoded encryption keys, insufficient entropy, improper certificate validation, using deprecated SSL/TLS versions, and inadequate key rotation."
+                },
+                {
+                    front: "A02:2021 - How to prevent Cryptographic Failures?",
+                    back: "Classify and protect sensitive data, don't store unnecessary sensitive data, encrypt all sensitive data at rest, use strong encryption algorithms and proper key management, disable caching for sensitive data, enforce HTTPS, use proper password storage with strong adaptive hashing."
+                },
+                {
+                    front: "A03:2021 - What is Injection?",
+                    back: "Injection flaws occur when untrusted data is sent to an interpreter as part of a command or query. Common examples include SQL injection, NoSQL injection, OS command injection, and LDAP injection. Attackers' hostile data can trick the interpreter into executing unintended commands or accessing data without authorization."
+                },
+                {
+                    front: "A03:2021 - Give examples of Injection vulnerabilities.",
+                    back: "SQL injection, NoSQL injection, OS command injection, LDAP injection, XML injection (XXE), ORM injection, XPath injection, SMTP header injection, template injection, and server-side JavaScript/Ruby/Python injection."
+                },
+                {
+                    front: "A03:2021 - How to prevent Injection vulnerabilities?",
+                    back: "Use a safe API that avoids using interpreters, parameterized queries, or ORM tools. Perform positive server-side input validation. Use LIMIT for SQL queries. Escape special characters. Implement SAST tools and automated testing for injection flaws."
+                },
+                {
+                    front: "A04:2021 - What is Insecure Design?",
+                    back: "Insecure design refers to risks related to design and architectural flaws, emphasizing the need for secure design patterns, threat modeling, and reference architectures. It's distinct from implementation flaws and represents a broad category of weaknesses that were previously not well-represented in the Top 10."
+                },
+                {
+                    front: "A04:2021 - Give examples of Insecure Design flaws.",
+                    back: "Missing authorization checks by design, lack of business limit validation, workflow bypass, insufficient audit trails, implicit trust of client-side validation, lack of rate limiting, missing encryption by design, and privacy control gaps."
+                },
+                {
+                    front: "A04:2021 - How to prevent Insecure Design?",
+                    back: "Establish secure development lifecycle with security professionals, use threat modeling for critical flows, integrate security requirements and user stories, reference secure design patterns and architectures, use security integration and unit tests, conduct secure code reviews, and limit resource consumption by user."
+                },
+                {
+                    front: "A05:2021 - What is Security Misconfiguration?",
+                    back: "Security misconfiguration is the most commonly seen issue, often resulting from insecure default configurations, incomplete or ad hoc configurations, open cloud storage, misconfigured HTTP headers, and verbose error messages containing sensitive information."
+                },
+                {
+                    front: "A05:2021 - Give examples of Security Misconfiguration.",
+                    back: "Unnecessary features enabled (ports, services, pages), default accounts with unchanged passwords, overly informative error messages, missing security headers, misconfigured SSL/TLS, outdated software, unnecessarily open cloud storage, and unprotected files/directories."
+                },
+                {
+                    front: "A05:2021 - How to prevent Security Misconfiguration?",
+                    back: "Implement secure hardening process, platform-specific security configurations, minimal platforms without unnecessary features, automated verification process for configurations, segmented application architecture, sending security directives to clients (security headers), and automated verification of configurations."
+                },
+                {
+                    front: "A06:2021 - What are Vulnerable and Outdated Components?",
+                    back: "Using components with known vulnerabilities can undermine application defenses and enable attacks. This includes using components that are outdated, unsupported, or vulnerable versions of libraries, frameworks, and other software modules that run with the same privileges as the application."
+                },
+                {
+                    front: "A06:2021 - Why are Vulnerable and Outdated Components dangerous?",
+                    back: "They can lead to entire application compromise, data loss, or server takeover. If the component runs with elevated privileges, it can affect the entire host system. Many exploits for known vulnerabilities are publicly available and can be easily used by attackers."
+                },
+                {
+                    front: "A06:2021 - How to prevent vulnerabilities from Outdated Components?",
+                    back: "Remove unused dependencies, continuously inventory components and their versions, monitor for vulnerabilities using tools like OWASP Dependency-Check, only use official sources, monitor unmaintained libraries, use Software Composition Analysis (SCA) tools in CI/CD, and implement virtual patches."
+                },
+                {
+                    front: "A07:2021 - What are Identification and Authentication Failures?",
+                    back: "Confirmation of the user's identity, authentication, and session management is critical to protect against authentication-related attacks. Weaknesses may include permitting automated attacks, brute force attacks, weak credentials, improper session management, and weak or ineffective credential recovery."
+                },
+                {
+                    front: "A07:2021 - Give examples of Identification and Authentication Failures.",
+                    back: "Permitting credential stuffing or brute force attacks, allowing weak passwords, using ineffective credential recovery processes, storing passwords in plain text or weakly hashed, missing or ineffective MFA, exposing session identifiers in URLs, and not properly invalidating session IDs."
+                },
+                {
+                    front: "A07:2021 - How to prevent Identification and Authentication Failures?",
+                    back: "Implement MFA, avoid default credentials, implement weak-password checks, align password policy with NIST 800-63b, harden registration and credential recovery processes, use server-side session management with secure cookies, and implement proper session timeouts."
+                },
+                {
+                    front: "A08:2021 - What is Software and Data Integrity Failures?",
+                    back: "Software and data integrity failures relate to code and infrastructure that does not protect against integrity violations. Examples include relying on plugins from untrusted sources, auto-update functionality without sufficient integrity verification, and CI/CD pipelines without proper security controls."
+                },
+                {
+                    front: "A08:2021 - Give examples of Software and Data Integrity Failures.",
+                    back: "Using plugins or libraries from untrusted CDNs or repositories, insecure CI/CD pipeline without proper checks, auto-update mechanisms without digital signatures, unsigned or unverified serialized data, reliance on client-side integrity, and unsigned JWTs."
+                },
+                {
+                    front: "A08:2021 - How to prevent Software and Data Integrity Failures?",
+                    back: "Use digital signatures to verify software/data integrity, ensure dependencies come from trusted repositories, use software supply chain security tools, implement review process for code changes, ensure CI/CD pipeline has proper segregation and configuration control, and sign serialized data."
+                },
+                {
+                    front: "A09:2021 - What is Security Logging and Monitoring Failures?",
+                    back: "This category helps detect, escalate, and respond to active breaches. Without logging and monitoring, breaches cannot be detected. Insufficient logging, detection, monitoring, and active response occurs any time security-relevant events are not logged or alerts are not effectively generated."
+                },
+                {
+                    front: "A09:2021 - Give examples of Security Logging and Monitoring Failures.",
+                    back: "Auditable events not logged, logs not monitored for suspicious activity, logs only stored locally, inappropriate log levels, inadequate logging of sensitive information (PII), unclear log messages, logs not properly time-synchronized, and no alerting for suspicious activities."
+                },
+                {
+                    front: "A09:2021 - How to prevent Security Logging and Monitoring Failures?",
+                    back: "Implement logging for authentication, access control failures, and server-side input validation failures. Ensure logs are in a format that log management solutions can consume, ensure high-value transactions have audit trails, establish effective monitoring and alerting, and develop a response and recovery plan."
+                },
+                {
+                    front: "A10:2021 - What is Server-Side Request Forgery (SSRF)?",
+                    back: "SSRF flaws occur whenever a web application is fetching a remote resource without validating the user-supplied URL. It allows an attacker to coerce the application to send a crafted request to an unexpected destination, even when protected by a firewall, VPN, or other network access control list (ACL)."
+                },
+                {
+                    front: "A10:2021 - Why is SSRF dangerous?",
+                    back: "SSRF enables attackers to force the application to send requests to internal services behind firewalls, access metadata services in cloud environments (potentially exposing access keys), scan internal networks, and exploit vulnerable internal services that aren't hardened against attacks."
+                },
+                {
+                    front: "A10:2021 - How to prevent SSRF vulnerabilities?",
+                    back: "Implement network layer controls (segregate remote resource access functionality, enforce 'deny by default' firewall policies), apply application layer controls (sanitize and validate all client-supplied input data, enforce URL schema/port/destination with positive allow list), and disable HTTP redirections."
+                }
+            ],
+            fundamentals: [
+                {
+                    front: "What is the CIA triad?",
+                    back: "The CIA triad refers to three core principles of information security: Confidentiality (ensuring data is accessible only to authorized users), Integrity (ensuring data remains accurate and unaltered), and Availability (ensuring systems and data are accessible when needed)."
+                },
+                {
+                    front: "What is the Same-Origin Policy?",
+                    back: "The Same-Origin Policy is a critical security mechanism that restricts how a document or script loaded from one origin can interact with resources from another origin. An origin is defined as a combination of URI scheme, host name, and port number."
+                },
+                {
+                    front: "What are the components that define an origin in the Same-Origin Policy?",
+                    back: "An origin is defined by three components: the URI scheme (like http or https), the host name (domain), and the port number. If any of these three are different, then the origin is considered different."
+                },
+                {
+                    front: "What is Content Security Policy (CSP)?",
+                    back: "Content Security Policy is an added layer of security that helps detect and mitigate certain types of attacks, including Cross-Site Scripting (XSS) and data injection attacks. It works by specifying which dynamic resources are allowed to load based on the source domain."
+                },
+                {
+                    front: "Give examples of CSP directives.",
+                    back: "Common CSP directives include: default-src (fallback for other resource types), script-src (valid JavaScript sources), style-src (valid CSS sources), img-src (valid image sources), connect-src (valid destinations for fetch/XHR/WebSocket), font-src, frame-src, and report-uri."
+                },
+                {
+                    front: "What is Defense in Depth?",
+                    back: "Defense in Depth is a security strategy that employs a layered approach with multiple defensive mechanisms. If one security control fails, others are in place to prevent a full breach. It includes technical, operational, and administrative controls across different security domains."
+                },
+                {
+                    front: "What is the difference between authentication and authorization?",
+                    back: "Authentication is the process of verifying who a user is (identity verification), while authorization is the process of verifying what specific resources a user has access to (permissions verification)."
+                },
+                {
+                    front: "What is a Web Application Firewall (WAF)?",
+                    back: "A Web Application Firewall is a security solution that filters, monitors, and blocks HTTP traffic to and from a web application. It protects web applications from various attacks like XSS, CSRF, SQL Injection, and more by inspecting HTTP requests and applying rules to filter out malicious traffic."
+                },
+                {
+                    front: "What is the principle of least privilege?",
+                    back: "The principle of least privilege states that a user, process, or program should be given only the minimum privileges necessary to complete its task. This limits the potential damage from accidents, errors, or unauthorized use."
+                },
+                {
+                    front: "What is HTTPS and why is it important?",
+                    back: "HTTPS (HTTP Secure) is an extension of HTTP that uses TLS/SSL encryption for secure communication over a computer network. It provides three key layers of protection: encryption (protecting the exchanged data), data integrity (preventing modification), and authentication (proving communication with the intended website)."
+                },
+                {
+                    front: "What is input validation and why is it necessary?",
+                    back: "Input validation is the process of checking that input data provided by users or other systems meets specified criteria. It's necessary to prevent malformed or malicious data from causing security issues like injection attacks, buffer overflows, or application crashes."
+                },
+                {
+                    front: "What is the difference between a vulnerability, a threat, and a risk?",
+                    back: "A vulnerability is a weakness in a system that could be exploited. A threat is a potential danger that might exploit a vulnerability. Risk is the potential for loss or damage when a threat exploits a vulnerability, calculated as the impact of the threat multiplied by the likelihood of it occurring."
+                },
+                {
+                    front: "What is the OWASP organization?",
+                    back: "The Open Web Application Security Project (OWASP) is a nonprofit foundation dedicated to improving software security. It operates as a community of security professionals who provide freely-available resources including documentation, tools, videos, and forums on application security."
+                },
+                {
+                    front: "What is vulnerability scanning?",
+                    back: "Vulnerability scanning is the process of automatically identifying security vulnerabilities in systems, networks, or applications. It uses specialized software to detect and report on known vulnerabilities, misconfigurations, or potential security weaknesses."
+                },
+                {
+                    front: "What is penetration testing?",
+                    back: "Penetration testing (or pen testing) is a simulated cyber attack against a system to check for exploitable vulnerabilities. It goes beyond automated vulnerability scanning by actively attempting to exploit vulnerabilities to determine what an attacker might be able to access or damage."
+                },
+                {
+                    front: "What is the difference between black box, white box, and gray box testing?",
+                    back: "Black box testing is performed without knowledge of the internal workings of the system. White box testing is done with full knowledge of internal structure and design. Gray box testing is a combination, with limited knowledge of internals, similar to what a privileged insider might have."
+                },
+                {
+                    front: "What is the SDLC and how does security fit into it?",
+                    back: "The Software Development Life Cycle (SDLC) is the process of planning, creating, testing, and deploying software. Security should be integrated into each phase as part of a Secure SDLC: requirements (security requirements), design (threat modeling), implementation (secure coding), testing (security testing), and maintenance (security patches)."
+                },
+                {
+                    front: "What is a security misconfiguration?",
+                    back: "A security misconfiguration is an improper setup of security controls for a server, web application, database, or other IT asset. Examples include default credentials, unnecessary open ports, error messages with sensitive data, unpatched flaws, or running outdated software."
+                },
+                {
+                    front: "What is the concept of 'shift left' in security?",
+                    back: "Shift left refers to moving security testing and practices earlier in the software development lifecycle. Rather than addressing security issues after development or deployment, shift left emphasizes integrating security from the beginning with requirements gathering, design, and early testing phases."
+                },
+                {
+                    front: "What is the difference between symmetric and asymmetric encryption?",
+                    back: "Symmetric encryption uses the same key for both encryption and decryption (faster but key distribution is challenging). Asymmetric encryption uses different keys for encryption (public key) and decryption (private key), solving the key distribution problem but generally slower."
+                }
+            ],
+            tools: [
+                {
+                    front: "What is Burp Suite used for?",
+                    back: "Burp Suite is an integrated platform for performing security testing of web applications. It contains various tools that work together to support the entire testing process, from initial mapping and analysis of an application's attack surface to finding and exploiting security vulnerabilities."
+                },
+                {
+                    front: "What are the main components of Burp Suite?",
+                    back: "Burp Suite includes: Proxy (intercepts and modifies requests/responses), Scanner (automated vulnerability detection), Intruder (customized attack automation), Repeater (manual request modification and resending), Decoder (encode/decode data), Comparer (compare data), and Sequencer (analyze randomness)."
+                },
+                {
+                    front: "What is OWASP ZAP (Zed Attack Proxy)?",
+                    back: "OWASP ZAP is an open-source web application security scanner. It automatically finds security vulnerabilities in web applications during development and testing. It acts as a 'man-in-the-middle proxy' between the tester's browser and the web application."
+                },
+                {
+                    front: "How does ZAP differ from Burp Suite?",
+                    back: "ZAP is fully open-source and free, while Burp has free and paid versions with more features in the paid version. ZAP provides more automated scanning in the free version, while Burp Professional offers more comprehensive scanning. ZAP has a strong community-driven development model, while Burp is commercial software."
+                },
+                {
+                    front: "What is Nmap and what is it used for?",
+                    back: "Nmap (Network Mapper) is an open-source tool for network discovery and security auditing. It uses IP packets to determine what hosts are available on the network, what services those hosts are offering, what operating systems they're running, what type of packet filters/firewalls are in use, and more."
+                },
+                {
+                    front: "What are common Nmap scan types?",
+                    back: "Common Nmap scan types include: TCP SYN scan (-sS, half-open scanning), TCP connect scan (-sT, complete connections), UDP scan (-sU), FIN scan (-sF, sends a FIN packet), Ping scan (-sP, just determine if hosts are online), and Version detection (-sV, determines service versions)."
+                },
+                {
+                    front: "What is Metasploit Framework?",
+                    back: "Metasploit Framework is an open-source penetration testing platform that enables you to find, exploit, and validate vulnerabilities. It provides a complete environment for penetration testing and exploit development, including a database of known exploits."
+                },
+                {
+                    front: "What are the key components of Metasploit?",
+                    back: "Key components include: Exploits (code to take advantage of vulnerabilities), Payloads (code that runs after exploitation), Auxiliaries (scanning, fuzzing, sniffing tools), Post-exploitation modules (for maintaining access), and the msfconsole (command interface)."
+                },
+                {
+                    front: "What is Nikto?",
+                    back: "Nikto is an open-source web server scanner that performs comprehensive tests against web servers for multiple items, including over 6700 potentially dangerous files/programs, outdated versions of servers, and version-specific problems on over 270 servers."
+                },
+                {
+                    front: "What is Wireshark used for?",
+                    back: "Wireshark is a network protocol analyzer that lets you capture and interactively browse the traffic running on a computer network. It provides detailed inspection of hundreds of protocols, live capture and offline analysis, and deep inspection of many protocols."
+                },
+                {
+                    front: "What is SQLmap?",
+                    back: "SQLmap is an open-source penetration testing tool that automates the process of detecting and exploiting SQL injection flaws and taking over database servers. It features a powerful detection engine, many niche features for the ultimate penetration tester, and a broad range of switches for database fingerprinting, data fetching, and accessing the underlying file system."
+                },
+                {
+                    front: "What is John the Ripper?",
+                    back: "John the Ripper is a free password cracking software tool designed to detect weak Unix passwords. It can automatically detect password hash types and includes a customizable cracker. It combines several cracking modes and is available for many operating systems."
+                },
+                {
+                    front: "What is OWASP Amass?",
+                    back: "OWASP Amass performs network mapping of attack surfaces and external asset discovery using open source information gathering and active reconnaissance techniques. It helps security professionals identify potential security vulnerabilities by discovering an organization's external attack surface."
+                },
+                {
+                    front: "What is Aircrack-ng?",
+                    back: "Aircrack-ng is a network software suite consisting of a detector, packet sniffer, WEP and WPA/WPA2-PSK cracker and analysis tool for 802.11 wireless LANs. It works with any wireless network interface controller whose driver supports raw monitoring mode."
+                },
+                {
+                    front: "What is Kali Linux?",
+                    back: "Kali Linux is a Debian-derived Linux distribution designed for digital forensics and penetration testing. It is maintained and funded by Offensive Security. It comes pre-installed with numerous penetration testing tools, making it a popular choice for security professionals."
+                },
+                {
+                    front: "What is Hydra?",
+                    back: "Hydra is a parallelized login cracker which supports numerous protocols to attack. It is very fast and flexible, and new modules are easy to add. It can perform rapid dictionary attacks against more than 50 protocols, including telnet, FTP, HTTP, HTTPS, SMB, databases, LDAP, and more."
+                },
+                {
+                    front: "What is Dirb/Dirbuster?",
+                    back: "Dirb/Dirbuster are web content scanning tools designed to find hidden directories and files by performing dictionary-based attacks against web servers. They use wordlists to find directories and files that are not linked directly from the website but are still accessible."
+                },
+                {
+                    front: "What is Maltego?",
+                    back: "Maltego is an open-source intelligence (OSINT) and graphical link analysis tool for gathering and connecting information for investigative tasks. It allows you to mine data from various sources, create visual link graphs, and identify relationships between information from different sources on the internet."
+                },
+                {
+                    front: "What is BeEF (Browser Exploitation Framework)?",
+                    back: "BeEF is a penetration testing tool focused on web browsers. It allows a penetration tester to assess the security posture of a target by using client-side attack vectors. It hooks one or more web browsers as beachheads for launching directed command modules and further attacks against the system."
+                },
+                {
+                    front: "What is Snort?",
+                    back: "Snort is an open-source network intrusion prevention system (NIPS) and network intrusion detection system (NIDS). It can perform real-time traffic analysis and packet logging on IP networks, as well as protocol analysis, content searching/matching, and detection of various attacks and probes."
+                }
+            ],
+            attacks: [
+                {
+                    front: "What is Cross-Site Scripting (XSS)?",
+                    back: "Cross-Site Scripting is a vulnerability that allows attackers to inject malicious client-side scripts into web pages viewed by other users. There are three main types: Stored XSS (the malicious script is stored on the target server), Reflected XSS (the malicious script is reflected off the web server), and DOM-based XSS (vulnerability exists in client-side code)."
+                },
+                {
+                    front: "What is the difference between Stored, Reflected, and DOM-based XSS?",
+                    back: "Stored XSS: Malicious script is permanently stored on the target server (database, message forum, etc). Reflected XSS: Malicious script is embedded in a URL and activated when the URL is clicked. DOM-based XSS: Vulnerability exists in client-side code, where the attack occurs entirely in the browser when DOM environment is modified."
+                },
+                {
+                    front: "How to prevent XSS attacks?",
+                    back: "Prevent XSS by: contextual output encoding/escaping, using Content Security Policy (CSP), validating input, sanitizing HTML output, using auto-escaping template systems, using HttpOnly flag for cookies, implementing XSS filters, and using modern frameworks that automatically escape output."
+                },
+                {
+                    front: "What is SQL Injection?",
+                    back: "SQL Injection is a code injection technique where an attacker executes malicious SQL statements to control a web application's database. Attackers can bypass authentication, access, modify, or delete data, and even execute administrative operations on the database."
+                },
+                {
+                    front: "What are the types of SQL Injection?",
+                    back: "Error-based: extracts data via error messages. Union-based: leverages UNION SQL operator to combine results from multiple SELECT statements. Blind (boolean): uses true/false questions to extract data. Time-based: uses time delays to extract data when no output is visible. Out-of-band: uses alternative channels to extract data."
+                },
+                {
+                    front: "How to prevent SQL Injection?",
+                    back: "Use parameterized queries (prepared statements), stored procedures, input validation, ORM frameworks, escaping user inputs, principle of least privilege for database accounts, and WAF. Never concatenate user input directly into SQL strings."
+                },
+                {
+                    front: "What is Cross-Site Request Forgery (CSRF)?",
+                    back: "Cross-Site Request Forgery is an attack that forces authenticated users to execute unwanted actions on a web application in which they're currently authenticated. It works by including a link or script in a page that accesses a site to which the user is known to have authenticated."
+                },
+                {
+                    front: "How to prevent CSRF attacks?",
+                    back: "Use anti-CSRF tokens (csrf_token) in forms, implement SameSite cookie attribute, check Referer and Origin headers, use custom request headers (X-Requested-With), require reauthentication for sensitive operations, and implement CORS properly."
+                },
+                {
+                    front: "What is a Man-in-the-Middle (MitM) attack?",
+                    back: "A Man-in-the-Middle attack occurs when an attacker secretly relays and possibly alters the communications between two parties who believe they are directly communicating with each other. The attacker must be able to intercept all relevant messages passing between the two victims and inject new ones."
+                },
+                {
+                    front: "How to prevent Man-in-the-Middle attacks?",
+                    back: "Implement strong encryption (TLS/SSL), certificate pinning, use HSTS (HTTP Strict Transport Security), public key infrastructure (PKI), multi-factor authentication, and VPNs. Always verify the authenticity of digital certificates and be wary of certificate warnings."
+                },
+                {
+                    front: "What is a Denial of Service (DoS) attack?",
+                    back: "A Denial of Service attack aims to make a machine or network resource unavailable to its intended users by temporarily or indefinitely disrupting services of a host connected to the Internet. DoS attacks typically flood the target with superfluous requests to overload systems and prevent legitimate requests from being fulfilled."
+                },
+                {
+                    front: "What is a Distributed Denial of Service (DDoS) attack?",
+                    back: "A DDoS attack is a type of DoS attack where multiple compromised systems (often infected with a Trojan) are used to target a single system. Unlike a simple DoS attack, DDoS attacks use multiple attack vectors, making them much harder to mitigate."
+                },
+                {
+                    front: "What are common types of DDoS attacks?",
+                    back: "Volume-based: saturates bandwidth (UDP floods, ICMP floods). Protocol: consumes server resources (SYN floods, fragmented packet attacks). Application layer: crashes the web server (HTTP floods, slow attacks like Slowloris). Amplification: uses DNS or NTP servers to multiply traffic volume."
+                },
+                {
+                    front: "What is XML External Entity (XXE) Processing?",
+                    back: "XXE is a vulnerability that occurs when XML input containing a reference to an external entity is processed by a weakly configured XML parser. It can lead to disclosure of confidential data, denial of service, server-side request forgery, port scanning, and other system impacts."
+                },
+                {
+                    front: "How to prevent XXE attacks?",
+                    back: "Disable XML external entity and DTD processing in XML parsers, implement whitelisting server-side input validation and filtering, patch or upgrade XML processors and libraries, use less complex data formats like JSON if possible, and implement WAF rules to detect XXE."
+                },
+                {
+                    front: "What is a Path Traversal attack?",
+                    back: "Path Traversal (also known as Directory Traversal) allows attackers to access files and directories that are stored outside the web root folder. By manipulating variables that reference files with 'dot-dot-slash (../)' sequences and variations, attackers can access arbitrary files and directories on the server."
+                },
+                {
+                    front: "How to prevent Path Traversal attacks?",
+                    back: "Validate and sanitize user input, use proper access controls and file permissions, implement whitelisting for file paths and names, avoid passing user-supplied input to filesystem APIs, use chrooted environments, and normalize paths before validation."
+                },
+                {
+                    front: "What is Insecure Deserialization?",
+                    back: "Insecure Deserialization occurs when untrusted data is used to abuse the logic of an application, inflict a DoS attack, or execute arbitrary code. It arises when an application deserializes untrusted user input without proper validation, allowing attackers to manipulate serialized objects."
+                },
+                {
+                    front: "How to prevent Insecure Deserialization vulnerabilities?",
+                    back: "Implement integrity checks like digital signatures on serialized objects, enforce strict type constraints during deserialization, isolate deserialization in low-privilege environments, log and monitor deserialization exceptions, and restrict or encrypt network connectivity for serialization processes."
+                },
+                {
+                    front: "What is a Business Logic Attack?",
+                    back: "Business Logic Attacks exploit vulnerabilities in the business logic of an application rather than technical vulnerabilities. These attacks manipulate legitimate functionality in an application in ways that were not anticipated during application design, abusing the workflow of applications to accomplish a goal that should not be allowed."
+                },
+                {
+                    front: "Give examples of Business Logic Attacks.",
+                    back: "Price manipulation, bypassing purchasing processes, abuse of free trial functionality, exploitation of referral systems, transaction/shopping cart tampering, circumventing access controls, abusing password recovery flows, and exploiting race conditions in time-sensitive operations."
+                },
+                {
+                    front: "What is a Clickjacking attack?",
+                    back: "Clickjacking (UI redressing) is an attack where users are tricked into clicking on actionable content on a hidden website by having it disguised as part of the content of another website they're viewing. The attacker loads the target website in a transparent iframe overlaid on a decoy website."
+                },
+                {
+                    front: "How to prevent Clickjacking attacks?",
+                    back: "Implement X-Frame-Options or Content-Security-Policy (frame-ancestors) HTTP headers to prevent your site from being framed, use frame-busting JavaScript, require user interaction beyond a single click for sensitive actions, and implement proper CSRF protections."
+                },
+                {
+                    front: "What is a Server-Side Request Forgery (SSRF) attack?",
+                    back: "SSRF is an attack where an attacker can send crafted requests from the back-end server of a vulnerable web application. The attacker might cause the server to make a connection to internal-only services or to external systems to exfiltrate data."
+                },
+                {
+                    front: "What is a Remote Code Execution (RCE) vulnerability?",
+                    back: "Remote Code Execution refers to a vulnerability that allows an attacker to execute arbitrary code on a target machine remotely. These are among the most severe vulnerabilities as they can lead to complete system compromise, data theft, and installation of malware or backdoors."
+                },
+                {
+                    front: "What is a Race Condition vulnerability?",
+                    back: "A race condition occurs when multiple processes access and manipulate the same data concurrently, and the outcome depends on the relative timing of their execution. In security contexts, attackers can exploit the time gap between checking and using a resource to manipulate the system state."
+                },
+                {
+                    front: "What is a Buffer Overflow attack?",
+                    back: "A buffer overflow occurs when a program tries to store more data in a buffer (temporary storage area) than it can hold. Attackers can use this to overwrite adjacent memory, potentially changing other data, hijacking program control flow, or causing crashes. Common in programs written in C and C++."
+                }
+            ],
+            bestpractices: [
+                {
+                    front: "What is Secure Software Development Life Cycle (SSDLC)?",
+                    back: "SSDLC integrates security testing and best practices into each phase of the software development lifecycle. It includes practices like threat modeling, code reviews, security testing, and security requirement analysis to build security into applications from the beginning rather than adding it later."
+                },
+                {
+                    front: "What are security headers and why are they important?",
+                    back: "Security headers are HTTP response headers that your application can use to increase the security of your application. They tell browsers how to behave when handling your site's content and can help mitigate common web vulnerabilities like XSS, clickjacking, and data injection attacks."
+                },
+                {
+                    front: "List some important security headers and their purpose.",
+                    back: "Content-Security-Policy: Controls resources the browser is allowed to load. X-Frame-Options: Prevents clickjacking. Strict-Transport-Security: Forces HTTPS connections. X-Content-Type-Options: Prevents MIME-type sniffing. X-XSS-Protection: Enables browser's XSS filters. Referrer-Policy: Controls referrer information. Permissions-Policy: Controls browser features."
+                },
+                {
+                    front: "What is the purpose of input sanitization?",
+                    back: "Input sanitization is the process of removing or replacing characters in user input that could be harmful. Unlike validation (which rejects improper input), sanitization attempts to clean the data to make it safe for processing, removing potential attack vectors like script tags or SQL commands."
+                },
+                {
+                    front: "What is the importance of proper error handling?",
+                    back: "Proper error handling prevents applications from revealing sensitive information in error messages. Detailed error messages can expose implementation details, stack traces, database structures, or other internal workings that attackers can use to plan more targeted attacks."
+                },
+                {
+                    front: "What is the difference between hashing and encryption?",
+                    back: "Hashing transforms data into a fixed-length string (hash) that cannot be reversed back to the original data. Encryption transforms data into a different format that can be reversed back to the original data using a key. Hashing is used for verification (like passwords), while encryption is used when data needs to be retrieved later."
+                },
+                {
+                    front: "What are salts in password security?",
+                    back: "A salt is random data added to a password before hashing. It creates unique hashes even for identical passwords, preventing rainbow table attacks and ensuring that even if two users have the same password, their stored hashes will be different."
+                },
+                {
+                    front: "Why should passwords be salted and hashed instead of just hashed?",
+                    back: "Salting protects against rainbow table attacks and dictionary attacks by ensuring that identical passwords don't produce identical hashes. Without salts, attackers could use precomputed tables of common password hashes to quickly crack multiple passwords. Salts ensure each password hash is unique even if the passwords are the same."
+                },
+                {
+                    front: "What is security by obscurity and why is it problematic?",
+                    back: "Security by obscurity is the reliance on the secrecy of design, implementation, or other aspects of a system for security. It's problematic because it provides a false sense of security - once the 'secret' is discovered, the system is completely vulnerable. Security should rely on well-tested algorithms and proper implementation, not secrecy."
+                },
+                {
+                    front: "What is certificate pinning?",
+                    back: "Certificate pinning is the practice of hardcoding or storing the expected certificate or public key for a server in your application. It adds an extra layer of security by ensuring that your app only communicates with the intended server, even if an attacker presents a valid but unexpected certificate."
+                },
+                {
+                    front: "What is STRIDE threat modeling?",
+                    back: "STRIDE is a threat modeling methodology that categorizes different types of threats: Spoofing (impersonating something or someone), Tampering (modifying data or code), Repudiation (claiming not to have performed an action), Information disclosure (exposing information), Denial of service (denying or degrading service), and Elevation of privilege (gaining unauthorized access)."
+                },
+                {
+                    front: "What is the principle of fail-secure vs. fail-open?",
+                    back: "Fail-secure (or fail-safe) means that if a system fails, it defaults to a secure state (e.g., denying access). Fail-open means that if a system fails, it defaults to an open state (e.g., allowing access). Security-critical systems should be designed to fail-secure to prevent unauthorized access during failures."
+                },
+                {
+                    front: "What is the principle of separation of duties?",
+                    back: "Separation of duties is a principle where multiple people are required to complete a sensitive task, preventing any single person from having excessive control. For example, the person who approves purchases should be different from the person who makes purchases, reducing the risk of fraud or error."
+                },
+                {
+                    front: "What is the principle of defense in depth?",
+                    back: "Defense in depth involves implementing multiple layers of security controls throughout a system. The idea is that if one security measure fails, others are in place to prevent a full breach. This includes combining different types of controls (preventive, detective, and corrective) at various levels (network, host, application, data)."
+                },
+                {
+                    front: "What is secure code review?",
+                    back: "Secure code review is the systematic examination of source code to identify security vulnerabilities and ensure adherence to security best practices and requirements. It can be manual (performed by humans) or automated (using static analysis tools), and ideally combines both approaches."
+                },
+                {
+                    front: "What is the principle of zero trust?",
+                    back: "Zero trust is a security concept that assumes no user or system, whether inside or outside the network perimeter, should be trusted by default. It requires continuous verification of identity and privileges, strict access controls, and least privilege enforcement. The philosophy is 'never trust, always verify.'"
+                },
+                {
+                    front: "What are static and dynamic application security testing (SAST and DAST)?",
+                    back: "SAST analyzes source code or compiled versions of code to find security vulnerabilities without executing the application. DAST analyzes a running application by attacking it from the outside, similar to how an attacker would. Both are important parts of a comprehensive security testing strategy."
+                },
+                {
+                    front: "What is secure session management?",
+                    back: "Secure session management involves properly creating, storing, and invalidating user sessions. Best practices include: using strong session IDs, secure cookies (with HttpOnly, Secure, and SameSite flags), proper session timeouts, regenerating IDs after authentication, and invalidating sessions on logout."
+                },
+                {
+                    front: "What is the OWASP ASVS (Application Security Verification Standard)?",
+                    back: "ASVS is a framework that provides a basis for testing web application security controls and also provides developers with a list of requirements for secure development. It defines three security verification levels (with increasing rigor) and covers authentication, session management, access control, validation, and other security areas."
+                },
+                {
+                    front: "What are some secure password storage practices?",
+                    back: "Use strong adaptive hashing algorithms (bcrypt, Argon2, PBKDF2), add unique salts to passwords before hashing, implement proper key stretching with work factors, store hashes rather than plaintext passwords, use pepper (secret key) for additional security, and enforce strong password policies."
+                }
+            ],
+            appsec: [
+                {
+                    front: "What is the difference between blacklist and whitelist input validation?",
+                    back: "Blacklisting (or denylisting) rejects known bad inputs by checking against a list of disallowed values or patterns. Whitelisting (or allowlisting) only permits inputs that match a predefined set of acceptable values. Whitelisting is generally more secure as it's harder to bypass and doesn't require predicting all possible malicious inputs."
+                },
+                {
+                    front: "What is server-side validation and why is it essential?",
+                    back: "Server-side validation involves checking user inputs on the server before processing them. It's essential because client-side validation can be bypassed by attackers (by disabling JavaScript or using tools to modify requests). All input validation should be performed on the server, even if also done on the client."
+                },
+                {
+                    front: "What is a Web Cache Poisoning attack?",
+                    back: "Web Cache Poisoning exploits the behavior of web servers and caches to serve malicious content to users. The attacker sends a request that causes the application to store some form of malicious content in the cache, which is then served to other users requesting the same resource."
+                },
+                {
+                    front: "What is prototype pollution in JavaScript?",
+                    back: "Prototype pollution is a vulnerability where an attacker is able to modify the JavaScript object prototype (Object.prototype). Since all JavaScript objects inherit from this base prototype, this can affect the behavior of all objects in the application, potentially leading to XSS, application logic bypasses, or other security issues."
+                },
+                {
+                    front: "What is the purpose of a CSP nonce?",
+                    back: "A CSP nonce is a random value generated once per page load and added to both the Content-Security-Policy header and to allowed script tags. This allows specific inline scripts to execute despite CSP restrictions, while still preventing injection of malicious scripts that wouldn't have the correct nonce."
+                },
+                {
+                    front: "What is the Same-Origin Policy and how does it protect users?",
+                    back: "Same-Origin Policy restricts how scripts on one origin can interact with resources from another origin. It prevents a malicious site from reading data from or modifying other websites the user is logged into, protecting users from cross-site request forgery and other cross-origin attacks."
+                },
+                {
+                    front: "What is CORS (Cross-Origin Resource Sharing)?",
+                    back: "CORS is a mechanism that allows a server to indicate which origins, other than its own, are permitted to load resources from it. It relaxes the Same-Origin Policy in controlled ways, allowing specific cross-origin requests while rejecting others, based on HTTP headers like Access-Control-Allow-Origin."
+                },
+                {
+                    front: "What is HSTS (HTTP Strict Transport Security)?",
+                    back: "HSTS is a web security policy mechanism that helps protect websites against protocol downgrade attacks and cookie hijacking. It allows web servers to declare that browsers should interact with them only using secure HTTPS connections, and never via the insecure HTTP protocol."
+                },
+                {
+                    front: "What is a subdomain takeover vulnerability?",
+                    back: "A subdomain takeover vulnerability occurs when a subdomain points to a service (like GitHub Pages, Heroku, etc.) that has been removed or deleted. An attacker can set up an account on the same service and claim the subdomain, allowing them to serve content under the organization's domain name."
+                },
+                {
+                    front: "What are JWT (JSON Web Tokens) and what security concerns do they present?",
+                    back: "JWTs are encoded JSON objects used for transmitting information securely. Security concerns include: improper signature validation, weak encryption keys, accepting 'none' algorithm, not checking the expiration, token stealing via XSS, and storing sensitive data in unencrypted JWTs."
+                },
+                {
+                    front: "What is NoSQL injection?",
+                    back: "NoSQL injection is a vulnerability where attackers can inject malicious code into queries for NoSQL databases like MongoDB. Instead of using SQL syntax, attackers may use JavaScript-based query selectors, JSON, or other formats depending on the database, allowing them to bypass authentication or access unauthorized data."
+                },
+                {
+                    front: "What is GraphQL and what security considerations does it present?",
+                    back: "GraphQL is a query language for APIs. Security considerations include: potential for complex queries causing DoS, overfetching or underfetching data, bypassing access controls through nested queries, injection attacks in queries, lack of rate limiting, and exposing system information through error messages."
+                },
+                {
+                    front: "What is SSRF (Server-Side Request Forgery) and how can it be mitigated?",
+                    back: "SSRF occurs when an attacker can make the server perform requests to arbitrary destinations. Mitigations include: validating and sanitizing user input, using allow-lists for domains/IPs, disabling HTTP redirections, using a dedicated external service for remote resources, and not returning raw responses to clients."
+                },
+                {
+                    front: "What is a reverse proxy and how does it improve security?",
+                    back: "A reverse proxy sits between clients and servers, forwarding client requests to appropriate backend servers. Security benefits include: hiding backend server details, providing a central point for TLS termination, load balancing, filtering malicious traffic, and serving as a web application firewall."
+                },
+                {
+                    front: "What are HTTP request smuggling attacks?",
+                    back: "HTTP request smuggling exploits differences in how frontend and backend servers process HTTP requests. Attackers craft ambiguous requests that pass through the front server but are interpreted differently by the backend, allowing them to 'smuggle' requests that bypass security controls."
+                },
+                {
+                    front: "What is API security and why is it important?",
+                    back: "API security involves protecting APIs from threats like unauthorized access, abuse, DoS, and data exposure. It's important because APIs often provide direct access to sensitive data and functionality, are increasingly used for machine-to-machine communication, and can expose broader attack surfaces than traditional web interfaces."
+                },
+                {
+                    front: "What is a horizontal privilege escalation?",
+                    back: "Horizontal privilege escalation occurs when a user can access resources belonging to another user with the same privilege level (e.g., a bank customer accessing another customer's account). It typically involves manipulating identifiers in requests (IDOR) or session hijacking."
+                },
+                {
+                    front: "What is a vertical privilege escalation?",
+                    back: "Vertical privilege escalation occurs when a user obtains access to functionality reserved for more privileged users (e.g., a regular user gaining admin capabilities). This may happen through missing function-level access controls, forced browsing, manipulating parameters, or exploiting vulnerabilities in administrative functions."
+                },
+                {
+                    front: "What is OWASP API Security Top 10?",
+                    back: "OWASP API Security Top 10 is a list of the most critical security risks to APIs: Broken object level authorization, Broken authentication, Excessive data exposure, Lack of resources & rate limiting, Broken function level authorization, Mass assignment, Security misconfiguration, Injection, Improper asset management, and Insufficient logging & monitoring."
+                },
+                {
+                    front: "What is the principle of complete mediation?",
+                    back: "Complete mediation requires that every access to a resource must be checked for authorization. This means not relying on cached results of previous security checks and ensuring that all access paths to a resource are protected, preventing attackers from bypassing access controls by using alternate paths."
+                }
+            ],
+            cryptography: [
+                {
+                    front: "What is the difference between encoding, encryption, and hashing?",
+                    back: "Encoding: Transforms data format for storage/transfer (not for security). Encryption: Transforms data to protect it, requires a key to decrypt. Hashing: One-way transformation that can't be reversed, used for verification but not for retrieving original data."
+                },
+                {
+                    front: "What is symmetric encryption?",
+                    back: "Symmetric encryption uses the same key for both encryption and decryption. It's fast and efficient for large amounts of data, but key distribution is challenging because both parties need the same secret key. Examples include AES, DES, and 3DES."
+                },
+                {
+                    front: "What is asymmetric encryption?",
+                    back: "Asymmetric encryption uses a pair of keys: a public key for encryption and a private key for decryption. It solves the key distribution problem of symmetric encryption but is computationally more expensive. Examples include RSA, ECC, and DSA."
+                },
+                {
+                    front: "What is a hash function?",
+                    back: "A hash function takes arbitrary input and produces a fixed-size string (hash value). Good cryptographic hash functions are one-way (can't be reversed), deterministic (same input always gives same output), fast to compute, and resistant to collisions (different inputs producing same hash)."
+                },
+                {
+                    front: "What is a collision in hashing?",
+                    back: "A collision occurs when two different inputs produce the same hash output. Cryptographic hash functions should be collision-resistant, meaning it should be computationally infeasible to find two different inputs that produce the same hash value."
+                },
+                {
+                    front: "What is a salt in password hashing?",
+                    back: "A salt is random data added to a password before hashing. It ensures that identical passwords don't produce identical hashes, preventing rainbow table attacks and ensuring each user's password hash is unique even if multiple users have the same password."
+                },
+                {
+                    front: "What is a rainbow table attack?",
+                    back: "A rainbow table attack uses precomputed tables of hash values for possible passwords to crack password hashes more quickly than brute force. Instead of calculating hashes on the fly, attackers look up hashes in the table. Salting passwords effectively counters this attack."
+                },
+                {
+                    front: "Why is MD5 considered insecure?",
+                    back: "MD5 is considered insecure because: it's vulnerable to collision attacks (different inputs can produce the same hash), it's too fast for password hashing (allows rapid brute force attacks), and researchers have demonstrated methods to generate collisions deliberately."
+                },
+                {
+                    front: "What makes a strong password hashing algorithm?",
+                    back: "A strong password hashing algorithm should be: slow (to resist brute force attacks), memory-hard (requiring significant RAM to compute), parameterized (adjustable work factor as hardware improves), and salt-compatible. Examples include bcrypt, Argon2, and PBKDF2."
+                },
+                {
+                    front: "What is HTTPS and how does it work?",
+                    back: "HTTPS is HTTP over TLS/SSL, providing encrypted communication. It works by: establishing a secure connection using asymmetric encryption (handshake), exchanging a symmetric session key, then using that key for efficient ongoing encryption. It authenticates the server (and optionally the client) using digital certificates."
+                },
+                {
+                    front: "What is a digital certificate?",
+                    back: "A digital certificate is an electronic document that proves the ownership of a public key. It contains the public key and identity information about the key owner, and is digitally signed by a trusted Certificate Authority (CA) to verify its authenticity."
+                },
+                {
+                    front: "What is a Certificate Authority (CA)?",
+                    back: "A Certificate Authority is a trusted entity that issues digital certificates, validating that a particular public key belongs to the entity named in the certificate. Browsers and operating systems maintain lists of trusted CAs, allowing them to verify certificates without user intervention."
+                },
+                {
+                    front: "What is Perfect Forward Secrecy (PFS)?",
+                    back: "Perfect Forward Secrecy is a feature of encryption protocols where compromise of long-term keys doesn't compromise past session keys. Each session uses a unique key derived from a temporary key exchange, so if a private key is later compromised, it can't be used to decrypt past communications."
+                },
+                {
+                    front: "What is a digital signature?",
+                    back: "A digital signature is a mathematical scheme for verifying the authenticity of digital messages or documents. It provides: authentication (proof of who created the message), non-repudiation (sender can't deny sending it), and integrity (message hasn't been altered). It uses the sender's private key to encrypt a hash of the message."
+                },
+                {
+                    front: "What is the difference between TLS and SSL?",
+                    back: "SSL (Secure Sockets Layer) is the predecessor to TLS (Transport Layer Security). TLS is more secure and has replaced SSL, which is now deprecated. All SSL versions (1.0, 2.0, 3.0) have vulnerabilities, and modern systems should use TLS 1.2 or 1.3."
+                },
+                {
+                    front: "What is HMAC?",
+                    back: "HMAC (Hash-based Message Authentication Code) is a specific method for calculating a message authentication code using a cryptographic hash function and a secret key. It provides a way to verify both the integrity and authenticity of a message."
+                },
+                {
+                    front: "What is key stretching?",
+                    back: "Key stretching strengthens a weak key (like a user password) by repeatedly hashing it to make attacks more computationally expensive. It makes brute force attacks slower by requiring more resources for each password guess. Examples include PBKDF2, bcrypt, and Argon2."
+                },
+                {
+                    front: "What is RSA?",
+                    back: "RSA (Rivest–Shamir–Adleman) is an asymmetric encryption algorithm based on the mathematical difficulty of factoring large prime numbers. It uses a public key for encryption and a private key for decryption, and is widely used for secure data transmission and digital signatures."
+                },
+                {
+                    front: "What is AES?",
+                    back: "AES (Advanced Encryption Standard) is a symmetric encryption algorithm adopted by the U.S. government. It operates on fixed block sizes of 128 bits using key lengths of 128, 192, or 256 bits. AES is considered secure and efficient, and is widely used for data encryption."
+                }
+            ],
+            authentication: [
+                {
+                    front: "What is Multi-Factor Authentication (MFA)?",
+                    back: "MFA requires users to provide two or more verification factors to gain access: something you know (password), something you have (security token), or something you are (biometric). It provides significantly stronger security than single-factor authentication because multiple factors must be compromised for an attack to succeed."
+                },
+                {
+                    front: "What are the common types of authentication factors?",
+                    back: "Knowledge factors: something you know (passwords, PINs, security questions). Possession factors: something you have (hardware tokens, smartphones, smart cards). Inherence factors: something you are (fingerprints, facial recognition, voice). Location factors: where you are. Time factors: when you're authenticating."
+                },
+                {
+                    front: "What is OAuth 2.0?",
+                    back: "OAuth 2.0 is an authorization framework that enables a third-party application to obtain limited access to a service on behalf of a user. It allows users to share specific data with an application while keeping their credentials secret. It's commonly used for 'Login with Google/Facebook' functionality."
+                },
+                {
+                    front: "What is the difference between OAuth and OpenID Connect?",
+                    back: "OAuth 2.0 is an authorization protocol (controlling what resources a client can access). OpenID Connect adds an identity layer on top of OAuth 2.0, providing authentication (verifying who a user is). OIDC includes standard fields for user information and an ID token (JWT) containing identity data."
+                },
+                {
+                    front: "What is SAML?",
+                    back: "SAML (Security Assertion Markup Language) is an XML-based framework for exchanging authentication and authorization data between parties, particularly between an identity provider and a service provider. It's commonly used for Single Sign-On (SSO) in enterprise environments."
+                },
+                {
+                    front: "What is Single Sign-On (SSO)?",
+                    back: "Single Sign-On is an authentication scheme that allows users to log in once and gain access to multiple systems without being prompted to log in again. It centralizes authentication, improving user experience and security by reducing password fatigue and centralizing access control."
+                },
+                {
+                    front: "What is session-based authentication?",
+                    back: "Session-based authentication creates a server-side session record when a user logs in, and provides the client with a session ID (usually in a cookie). For subsequent requests, only the session ID is sent, which the server uses to retrieve the session data. Sessions typically expire after a period of inactivity."
+                },
+                {
+                    front: "What is token-based authentication?",
+                    back: "Token-based authentication generates a signed token (often a JWT) containing user identity information when a user logs in. The client stores and sends this token with each request. The server validates the token's signature without needing to store session state, making it suitable for stateless and distributed systems."
+                },
+                {
+                    front: "What are JWTs (JSON Web Tokens)?",
+                    back: "JWTs are compact, self-contained tokens that securely transmit information between parties as a JSON object. They consist of a header (token type, algorithm), payload (claims about the user), and signature (to verify authenticity). They're commonly used for authentication and information exchange."
+                },
+                {
+                    front: "What are common JWT security issues?",
+                    back: "Not validating signatures properly, accepting the 'none' algorithm, using weak signature keys, not checking expiration (exp claim), not validating the audience (aud claim), exposing sensitive data in the payload (which is only encoded, not encrypted), and vulnerability to token theft via XSS."
+                },
+                {
+                    front: "What is RBAC (Role-Based Access Control)?",
+                    back: "RBAC is an access control method where permissions are associated with roles, and users are assigned to roles. Users acquire permissions through their role assignments rather than having permissions assigned directly. This simplifies management of user permissions, especially in large organizations."
+                },
+                {
+                    front: "What is ABAC (Attribute-Based Access Control)?",
+                    back: "ABAC makes access decisions based on attributes of the user, resource, action, and environment. Unlike RBAC, which is based on predefined roles, ABAC allows for more dynamic and fine-grained access control based on various characteristics and conditions at the time of access."
+                },
+                {
+                    front: "What is passwordless authentication?",
+                    back: "Passwordless authentication verifies user identity without requiring a password. Methods include: email/SMS one-time codes, biometrics, hardware tokens, cryptographic key pairs (WebAuthn/FIDO2), and magic links. It aims to improve security by eliminating password-related vulnerabilities while enhancing user experience."
+                },
+                {
+                    front: "What is WebAuthn/FIDO2?",
+                    back: "WebAuthn (Web Authentication) is a standard for passwordless authentication. Part of the FIDO2 framework, it allows websites to authenticate users via public key cryptography using hardware devices (security keys) or platform authenticators (like fingerprint readers). It's resistant to phishing as credentials are tied to specific origins."
+                },
+                {
+                    front: "What are the security considerations for session management?",
+                    back: "Generate strong, random session IDs; rotate IDs after login (to prevent session fixation); set secure, HttpOnly, and SameSite cookie flags; implement proper timeouts (absolute and idle); provide logout functionality; validate session data on the server side; and bind sessions to additional factors (IP, user agent)."
+                },
+                {
+                    front: "What is Cross-Site Request Forgery (CSRF) and how does it relate to authentication?",
+                    back: "CSRF tricks authenticated users into executing unwanted actions on websites where they're logged in. It exploits the site's trust in the user's browser. Prevention measures include anti-CSRF tokens (which must be validated with every state-changing request) and SameSite cookies."
+                },
+                {
+                    front: "What is the principle of least privilege?",
+                    back: "The principle of least privilege means giving users only the minimum access rights needed to perform their job functions. It limits the potential damage from accidents, errors, or unauthorized use. Even administrative users should use regular accounts for daily tasks, using elevated privileges only when necessary."
+                },
+                {
+                    front: "What are secure password policies?",
+                    back: "Modern secure password policies include: requiring sufficient length (12+ characters) rather than complexity, checking against lists of commonly used/breached passwords, avoiding arbitrary character composition rules, not requiring periodic password changes without reason, and encouraging password managers."
+                },
+                {
+                    front: "What is CAPTCHA and what security purpose does it serve?",
+                    back: "CAPTCHA (Completely Automated Public Turing test to tell Computers and Humans Apart) challenges designed to be difficult for computers but easy for humans. They protect against automated abuse like credential stuffing, account enumeration, spam submission, and scraping by requiring human intervention."
+                },
+                {
+                    front: "What is the risk of relying on security questions for account recovery?",
+                    back: "Security questions are problematic because: answers may be publicly available (social media, public records), answers can change over time, questions often have limited or predictable answers, and they're vulnerable to social engineering. Better alternatives include email verification codes, backup codes, or recovery via trusted contacts."
+                }
+            ],
+            mobile: [
+                {
+                    front: "What is the difference between native, hybrid, and web mobile applications?",
+                    back: "Native apps are built specifically for one platform using platform-specific languages (Swift/Objective-C for iOS, Java/Kotlin for Android). Hybrid apps use web technologies (HTML/CSS/JS) wrapped in a native container. Web apps run in browsers with no installation required. Each has different security implications."
+                },
+                {
+                    front: "What are some common mobile application security risks?",
+                    back: "Insecure data storage, weak server-side controls, insufficient transport layer protection, client-side injection, poor authorization/authentication, improper session handling, security decisions via untrusted inputs, side channel data leakage, broken cryptography, and sensitive information disclosure."
+                },
+                {
+                    front: "What is the OWASP Mobile Top 10?",
+                    back: "The OWASP Mobile Top 10 lists the most critical mobile application security risks: Improper Platform Usage, Insecure Data Storage, Insecure Communication, Insecure Authentication, Insufficient Cryptography, Insecure Authorization, Client Code Quality, Code Tampering, Reverse Engineering, and Extraneous Functionality."
+                },
+                {
+                    front: "What security risks are specific to Android applications?",
+                    back: "Insecure inter-component communication (Intents), improper permission usage, insecure content providers, unprotected exported components, insecure WebView implementations, native code vulnerabilities, improper certificate validation, and risks from third-party libraries."
+                },
+                {
+                    front: "What is the Android permission system?",
+                    back: "Android uses a permission system to control app access to protected data and features. Permissions are declared in the manifest and either granted at installation (normal permissions) or requested at runtime (dangerous permissions). The principle of least privilege should be followed, requesting only necessary permissions."
+                },
+                {
+                    front: "What security risks are specific to iOS applications?",
+                    back: "Insecure data storage in plist files or Keychain with improper access controls, lack of proper certificate validation, insecure URL handling, app transport security (ATS) bypass, improper use of touch/face ID, jailbreak detection bypasses, and client-side injection vulnerabilities."
+                },
+                {
+                    front: "What is app signing and why is it important?",
+                    back: "App signing adds a digital signature to applications using cryptographic keys, ensuring the app comes from a known developer and hasn't been modified. It helps prevent app tampering and malware distribution. Both Android (APK signing) and iOS (code signing) require apps to be signed before distribution."
+                },
+                {
+                    front: "What is certificate pinning in mobile applications?",
+                    back: "Certificate pinning associates a host with its expected X.509 certificate or public key. The app contains a predefined set of trusted certificates/keys and only trusts connections matching these. It prevents man-in-the-middle attacks even when the device is compromised with a malicious CA certificate."
+                },
+                {
+                    front: "What is jailbreaking/rooting and what security implications does it have?",
+                    back: "Jailbreaking (iOS) or rooting (Android) removes manufacturer restrictions on devices, giving users elevated privileges. Security implications include: bypassing app store security reviews, disabling security features, increased malware risk, circumventing encryption, and making it easier to extract sensitive data from applications."
+                },
+                {
+                    front: "What is secure local data storage in mobile applications?",
+                    back: "Secure local storage involves: using platform-specific secure storage (iOS Keychain, Android Keystore) for sensitive data, applying proper file encryption, not storing sensitive data in shared locations, avoiding storage in plain text files/preferences/databases, and implementing proper access controls."
+                },
+                {
+                    front: "What is biometric authentication in mobile apps?",
+                    back: "Biometric authentication uses physical characteristics (fingerprint, face, iris) to verify identity. Mobile platforms provide APIs like Touch ID/Face ID (iOS) and BiometricPrompt (Android). For security, biometrics should be used with proper server-side validation and not as the sole authentication factor for high-security functions."
+                },
+                {
+                    front: "What is app hardening or anti-tampering?",
+                    back: "App hardening employs techniques to prevent reverse engineering and tampering: code obfuscation, anti-debugging measures, integrity checks, environment checks (emulator/jailbreak detection), and encryption of sensitive assets. It makes apps more resistant to analysis, modification, and intellectual property theft."
+                },
+                {
+                    front: "How should mobile apps handle authentication tokens?",
+                    back: "Store tokens in secure platform-specific storage (Keychain/Keystore), not in shared preferences or local storage. Implement token expiration and refresh mechanisms. Ensure tokens are invalidated on logout. Use short-lived tokens when possible. Implement certificate pinning to prevent token interception during transmission."
+                },
+                {
+                    front: "What is insecure data serialization in mobile apps?",
+                    back: "Insecure serialization occurs when apps serialize/deserialize data without proper validation, enabling attacks like object injection. Mobile apps should validate all serialized data before processing, avoid using powerful serialization frameworks for untrusted data, and implement integrity checks on serialized data."
+                },
+                {
+                    front: "What are deeplinks and what security concerns do they present?",
+                    back: "Deeplinks allow opening specific app content via URLs (iOS Universal Links, Android App Links). Security concerns include: lack of validation enabling malicious parameters, improper authentication when following deeplinks, information leakage through deeplink parameters, and potential for phishing attacks."
+                },
+                {
+                    front: "What is WebView security in mobile apps?",
+                    back: "WebViews display web content within apps. Security concerns include: JavaScript injection, improper handling of file access, insecure bridge implementations between JavaScript and native code, lack of certificate validation, loading content over HTTP, and enabling dangerous WebView settings like JavaScript interfaces without proper validation."
+                },
+                {
+                    front: "What is secure communication in mobile applications?",
+                    back: "Secure communication involves: enforcing HTTPS for all network communication, implementing certificate pinning, validating server certificates properly, encrypting sensitive data before transmission, avoiding sensitive data in URLs, and implementing proper session management."
+                },
+                {
+                    front: "How should mobile apps protect sensitive data in memory?",
+                    back: "To protect data in memory: limit sensitive data lifetime (clear when no longer needed), avoid logging sensitive information, use SecureString where available, disable screenshots for sensitive screens, implement proper memory management, and consider memory encryption for highly sensitive data."
+                },
+                {
+                    front: "What is secure offline authentication?",
+                    back: "Secure offline authentication allows users to authenticate without an internet connection. Implementations should: use strong encryption for cached credentials, implement local timeouts, limit offline functionality to less sensitive features, require online re-authentication periodically, and provide account lockout mechanisms."
+                },
+                {
+                    front: "How can apps protect against reverse engineering?",
+                    back: "Protection methods include: code obfuscation (renaming variables/functions, control flow obfuscation), native code usage (harder to decompile than Java/Swift), string encryption, anti-debugging techniques, integrity checks, and tamper detection. Complete protection is impossible, but these techniques increase the difficulty."
+                }
+            ]
+        };
+
+        // Initialize variables
+        let currentCategory = 'owasp';
         let currentCardIndex = 0;
-        let filteredCards = [...flashcards];
-        
+        let isFlipped = false;
+
         // DOM elements
-        const cardElement = document.getElementById('card');
-        const questionElement = document.getElementById('question');
-        const answerElement = document.getElementById('answer');
-        const counterElement = document.getElementById('counter');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const categorySelect = document.getElementById('categorySelect');
-        
-        // Initialize
-        filterCards();
-        updateCard();
-        
-        // Event listeners
-        cardElement.addEventListener('click', () => {
-            cardElement.classList.toggle('flipped');
-        });
-        
-        prevBtn.addEventListener('click', () => {
-            if (currentCardIndex > 0) {
-                currentCardIndex--;
-                cardElement.classList.remove('flipped');
-                updateCard();
-            }
-        });
-        
-        nextBtn.addEventListener('click', () => {
-            if (currentCardIndex < filteredCards.length - 1) {
-                currentCardIndex++;
-                cardElement.classList.remove('flipped');
-                updateCard();
-            }
-        });
-        
-        categorySelect.addEventListener('change', () => {
-            filterCards();
+        const flashcardEl = document.getElementById('flashcard');
+        const frontContentEl = document.getElementById('front-content');
+        const backContentEl = document.getElementById('back-content');
+        const categorySelectEl = document.getElementById('category-select');
+        const prevButtonEl = document.getElementById('prev-button');
+        const nextButtonEl = document.getElementById('next-button');
+        const counterEl = document.getElementById('counter');
+
+        // Function to display the current card
+        function displayCard() {
+            const cards = flashcards[currentCategory];
+            const currentCard = cards[currentCardIndex];
+            
+            frontContentEl.textContent = currentCard.front;
+            backContentEl.textContent = currentCard.back;
+            counterEl.textContent = `Card ${currentCardIndex + 1} of ${cards.length}`;
+            
+            // Reset flip state
+            isFlipped = false;
+            flashcardEl.classList.remove('flipped');
+        }
+
+        // Function to handle category change
+        function handleCategoryChange() {
+            currentCategory = categorySelectEl.value;
             currentCardIndex = 0;
-            cardElement.classList.remove('flipped');
-            updateCard();
-        });
-        
-        function filterCards() {
-            const selectedCategory = categorySelect.value;
-            if (selectedCategory === 'all') {
-                filteredCards = [...flashcards];
+            displayCard();
+        }
+
+        // Function to handle card flipping
+        function handleCardFlip() {
+            isFlipped = !isFlipped;
+            if (isFlipped) {
+                flashcardEl.classList.add('flipped');
             } else {
-                filteredCards = flashcards.filter(card => card.category === selectedCategory);
+                flashcardEl.classList.remove('flipped');
+            }
+        }
+
+        // Function to go to the previous card
+        function goToPrevCard() {
+            const cards = flashcards[currentCategory];
+            currentCardIndex = (currentCardIndex - 1 + cards.length) % cards.length;
+            displayCard();
+        }
+
+        // Function to go to the next card
+        function goToNextCard() {
+            const cards = flashcards[currentCategory];
+            currentCardIndex = (currentCardIndex + 1) % cards.length;
+            displayCard();
+        }
+
+        // Event listeners
+        categorySelectEl.addEventListener('change', handleCategoryChange);
+        flashcardEl.addEventListener('click', handleCardFlip);
+        prevButtonEl.addEventListener('click', goToPrevCard);
+        nextButtonEl.addEventListener('click', goToNextCard);
+
+        // Swipe functionality
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        function handleTouchStart(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }
+        
+        function handleTouchEnd(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }
+        
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                // Swipe left
+                goToNextCard();
+            } else if (touchEndX > touchStartX + 50) {
+                // Swipe right
+                goToPrevCard();
             }
         }
         
-        function updateCard() {
-            const card = filteredCards[currentCardIndex];
-            questionElement.textContent = card.question;
-            answerElement.textContent = card.answer;
-            counterElement.textContent = `Card ${currentCardIndex + 1} of ${filteredCards.length}`;
-        }
+        document.addEventListener('touchstart', handleTouchStart, false);
+        document.addEventListener('touchend', handleTouchEnd, false);
+
+        // Initialize the app
+        displayCard();
     </script>
 </body>
 </html>
