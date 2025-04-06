@@ -1,4 +1,4 @@
-# Security Flashcards
+# Pentest Flashcards
 
 A comprehensive mobile-friendly flashcard application for studying cybersecurity, penetration testing, and web application security concepts.
 
