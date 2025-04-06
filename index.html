@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Security Flashcards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 200px;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .card-front, .card-back {
+            transition: opacity 0.3s, transform 0.3s;
+            backface-visibility: hidden;
+        }
+        .card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 20px;
+            background-color: white;
+            opacity: 0;
+            transform: translateY(10px);
+            overflow-y: auto;
+        }
+        .flipped .card-front {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        .flipped .card-back {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .category-select {
+            margin-bottom: 20px;
+            width: 100%;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Web Security Flashcards</h1>
+    
+    <select id="categorySelect" class="category-select">
+        <option value="all">All Categories</option>
+        <option value="owasp">OWASP Top 10</option>
+        <option value="fundamentals">Security Fundamentals</option>
+        <option value="tools">Security Tools</option>
+        <!-- Add more categories as needed -->
+    </select>
+    
+    <div class="controls">
+        <button id="prevBtn">Previous</button>
+        <span id="counter">Card 1 of X</span>
+        <button id="nextBtn">Next</button>
+    </div>
+    
+    <div id="card" class="card">
+        <div class="card-front">
+            <h3 id="question"></h3>
+        </div>
+        <div class="card-back">
+            <h3>Answer:</h3>
+            <p id="answer"></p>
+        </div>
+    </div>
+    
+    <script>
+        // Your flashcard data - you would replace with your full list
+        const flashcards = [
+            {
+                category: "owasp",
+                question: "What is Broken Access Control?",
+                answer: "Broken Access Control occurs when restrictions on authenticated users are not properly enforced. It allows attackers to access unauthorized functionality or data, such as accessing other users' accounts, viewing sensitive documents, modifying data, or changing access rights."
+            },
+            {
+                category: "owasp",
+                question: "What is Cryptographic Failures?",
+                answer: "Cryptographic Failures relate to failures in cryptography, or the absence of encryption when needed. These vulnerabilities can expose sensitive data such as financial information, healthcare records, or credentials."
+            },
+            // Add more cards here
+        ];
+        
+        // App state
+        let currentCardIndex = 0;
+        let filteredCards = [...flashcards];
+        
+        // DOM elements
+        const cardElement = document.getElementById('card');
+        const questionElement = document.getElementById('question');
+        const answerElement = document.getElementById('answer');
+        const counterElement = document.getElementById('counter');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const categorySelect = document.getElementById('categorySelect');
+        
+        // Initialize
+        filterCards();
+        updateCard();
+        
+        // Event listeners
+        cardElement.addEventListener('click', () => {
+            cardElement.classList.toggle('flipped');
+        });
+        
+        prevBtn.addEventListener('click', () => {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                cardElement.classList.remove('flipped');
+                updateCard();
+            }
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            if (currentCardIndex < filteredCards.length - 1) {
+                currentCardIndex++;
+                cardElement.classList.remove('flipped');
+                updateCard();
+            }
+        });
+        
+        categorySelect.addEventListener('change', () => {
+            filterCards();
+            currentCardIndex = 0;
+            cardElement.classList.remove('flipped');
+            updateCard();
+        });
+        
+        function filterCards() {
+            const selectedCategory = categorySelect.value;
+            if (selectedCategory === 'all') {
+                filteredCards = [...flashcards];
+            } else {
+                filteredCards = flashcards.filter(card => card.category === selectedCategory);
+            }
+        }
+        
+        function updateCard() {
+            const card = filteredCards[currentCardIndex];
+            questionElement.textContent = card.question;
+            answerElement.textContent = card.answer;
+            counterElement.textContent = `Card ${currentCardIndex + 1} of ${filteredCards.length}`;
+        }
+    </script>
+</body>
+</html>
