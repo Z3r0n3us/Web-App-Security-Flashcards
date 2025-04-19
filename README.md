@@ -50,15 +50,7 @@ The flashcards cover a broad range of penetration testing and security topics in
 3. Use the Previous/Next buttons or swipe left/right to navigate between cards
 4. Add to your home screen for app-like experience on mobile devices
 
-## Tip for iOS Users
 
-To add this application to your iPhone home screen:
-1. Open the site in Safari
-2. Tap the share button (the square with an arrow pointing up)
-3. Scroll down and tap "Add to Home Screen"
-4. Name it and tap "Add"
-
-This will create an app-like icon on your home screen that opens the flashcards directly.
 
 ## Development
 
